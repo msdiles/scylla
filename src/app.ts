@@ -1,4 +1,5 @@
 import express, { Application } from "express"
+import { errorMiddleware } from "./middlewares/errorMiddleware"
 
 class App {
   public app: Application
@@ -25,7 +26,9 @@ class App {
     })
   }
 
-  private errorHandler() {}
+  private errorHandler() {
+    this.app.use(errorMiddleware)
+  }
 
   public listen() {
     if (process.env.NODE_ENV !== "test")

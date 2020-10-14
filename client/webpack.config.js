@@ -29,6 +29,14 @@ module.exports = {
           { loader: "sass-loader" },
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg|eot|ttf|woff(2)?)$/i,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
+      },
     ],
   },
   resolve: {

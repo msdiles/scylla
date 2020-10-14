@@ -1,7 +1,12 @@
-div {
-  border: 1px solid green;
+body{
+  margin: 0;
 }
 
-h1 {
-  background-color: red;
+.text_centered{
+  text-align: center;
+}
+
+.flex-centered{
+  display: flex;
+  justify-content: center;
 }
