@@ -2,6 +2,7 @@ import {
   AUTH_END_LOADING,
   AUTH_GET_USER_INFO_SUCCEEDED,
   AUTH_LOGOUT_SUCCEEDED,
+  AUTH_REFRESH_REQUESTED,
   AUTH_REFRESH_SUCCEEDED,
   AUTH_SIGN_IN_SUCCEEDED,
   AUTH_START_LOADING,
@@ -15,6 +16,7 @@ interface AuthState {
   userRole: [string] | []
   isLogged: boolean
   loading: boolean
+  started: boolean
 }
 
 const initialState: AuthState = {
@@ -24,6 +26,7 @@ const initialState: AuthState = {
   userRole: [],
   isLogged: false,
   loading: false,
+  started: false,
 }
 const authReducer = (
   state = initialState,
@@ -54,6 +57,7 @@ const authReducer = (
         userName: action.payload.user.name,
         userId: action.payload.user.id,
         userRole: action.payload.user.role,
+        isLogged: true,
       }
     case AUTH_REFRESH_SUCCEEDED:
       return {
@@ -62,9 +66,10 @@ const authReducer = (
         userId: action.payload.user.id,
         userToken: action.payload.accessToken,
         userRole: action.payload.user.role,
+        isLogged: true,
       }
     case AUTH_START_LOADING:
-      return { ...state, loading: true }
+      return { ...state, loading: true, started: true }
     case AUTH_END_LOADING:
       return { ...state, loading: false }
     default:

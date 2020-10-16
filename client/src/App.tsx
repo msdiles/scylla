@@ -1,17 +1,24 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Switch } from "react-router-dom"
-import Routes from "./components/Routes"
+import Router from "./components/Routes"
 import "./app.scss"
 import history from "@/utils/history"
 import { ConnectedRouter } from "connected-react-router"
+import SnackbarHandler from "@/components/SnackbarHandler"
+import { useDispatch } from "react-redux"
+import { refreshRequested } from "@/state/actions/auth.actions"
 
 const App: React.FC = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    console.log("FETCHED")
+    dispatch(refreshRequested())
+  }, [])
   return (
     <div className="app">
       <ConnectedRouter history={history}>
-        <Switch>
-          <Routes />
-        </Switch>
+        <Router />
+        <SnackbarHandler />
       </ConnectedRouter>
     </div>
   )

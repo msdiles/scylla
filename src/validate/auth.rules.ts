@@ -67,14 +67,14 @@ export class AuthRules {
         .not()
         .isEmpty()
         .withMessage("fingerprint is empty")
-        .isLength({ min: 6, max: 128 })
+        .isLength({ min: 1, max: 128 })
         .withMessage("Length less than 3 characters or more then 128")
         .trim(),
       check("data.password")
         .not()
         .isEmpty()
         .withMessage("Password is empty")
-        .isLength({ min: 8, max: 128 })
+        .isLength({ min: 1, max: 128 })
         .withMessage("Length less than 6 characters or more then 128")
         .trim(),
     ]

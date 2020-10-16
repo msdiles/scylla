@@ -24,23 +24,23 @@ export function* signInRequestedSaga(action: SignInRequestedAction) {
   try {
     yield put(startLoadingAction())
     const fingerprint = yield call(getFingerprint)
-    console.log(fingerprint)
     if (fingerprint) {
       const response = yield call(http, "/auth/signin", "POST", {
         ...action.payload.data,
         fingerprint,
       })
       if (response.status === 401) throw new Error("Invalid password or email")
+      if (response.status === 422) throw new Error("Invalid format")
       const result = yield response.json()
       yield put(signInSucceeded({ ...result }))
       yield call(Storage.setInStorage, "session", result.refreshToken)
       yield put(redirect({ path: "/" }))
-      yield put(setMessage(result.message))
+      yield put(setMessage({ message: result.message }))
     } else {
       throw new Error("Something went wrong")
     }
   } catch (e) {
-    yield put(setError(e.message))
+    yield put(setError({ error: e.message }))
   } finally {
     yield put(endLoadingAction())
   }
@@ -56,12 +56,12 @@ export function* logoutRequestedSaga() {
       })
       const result = yield response.json()
       yield call(Storage.removeFromStorage, "session")
-      yield put(setMessage(result.message))
+      yield put(setMessage({ message: result.message }))
     }
     yield put(logoutSucceeded())
     yield put(redirect({ path: "/" }))
   } catch (e) {
-    yield put(setError(e.message))
+    yield put(setError({ error: e.message }))
   } finally {
     yield put(endLoadingAction())
   }
@@ -72,7 +72,6 @@ export function* refreshRequestedSaga() {
     yield put(startLoadingAction())
     const token = yield call(Storage.takeFromStorage, "session")
     const fingerprint = yield call(getFingerprint)
-
     if (token && fingerprint) {
       const response = yield call(http, "/auth/refresh", "POST", {
         token,
@@ -83,7 +82,7 @@ export function* refreshRequestedSaga() {
         yield call(Storage.removeFromStorage, "session")
         yield put(setMessage({ message: "Your session expired" }))
         yield put(logoutSucceeded())
-        yield put(redirect({ path: "/" }))
+        yield put(redirect({ path: "/login" }))
       } else {
         yield put(
           refreshSucceeded({
@@ -95,10 +94,10 @@ export function* refreshRequestedSaga() {
       }
     } else {
       yield put(logoutSucceeded())
-      yield put(redirect({ path: "/" }))
+      yield put(redirect({ path: "/login" }))
     }
   } catch (e) {
-    yield put(setError(e.message))
+    yield put(setError({ error: e.message }))
   } finally {
     yield put(endLoadingAction())
   }
@@ -123,7 +122,7 @@ export function* getUserInfoRequestedSaga() {
       yield put(redirect({ path: "/" }))
     }
   } catch (e) {
-    yield put(setError(e.message))
+    yield put(setError({ error: e.message }))
   } finally {
     yield put(endLoadingAction())
   }

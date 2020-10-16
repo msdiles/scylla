@@ -1,0 +1,35 @@
+.snackbar {
+  display: block;
+  position: relative;
+  right: 5%;
+  z-index: 1000;
+  margin: 1rem;
+  width: 15rem;
+  top:0;
+  cursor: pointer;
+}
+
+.snackbar_content {
+
+}
+.snackbar-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.snackbar-enter-active {
+  transform: translateY(0);
+  top:0;
+  opacity: 1;
+  transition: all 500ms !important;
+}
+
+.snackbar-exit {
+  opacity: 1;
+}
+
+.snackbar-exit-active {
+  top:-10rem;
+  opacity: 0;
+  transition: all 300ms !important;
+}

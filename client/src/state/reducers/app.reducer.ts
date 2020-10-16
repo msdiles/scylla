@@ -19,15 +19,15 @@ const initialState: AppState = {
 const appReducer = (state = initialState, action: AppActionTypes) => {
   switch (action.type) {
     case APP_SET_ERROR:
-      return { ...state, error: action.payload }
+      return { ...state, error: action.payload.error }
     case APP_REMOVE_ERROR:
       return { ...state, error: "" }
     case APP_SET_MESSAGE:
-      return { ...state, message: action.payload }
+      return { ...state, message: action.payload.message }
     case APP_REMOVE_MESSAGE:
       return { ...state, message: "" }
     default:
-      return state
+      return { ...state }
   }
 }
 

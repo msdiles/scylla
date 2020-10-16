@@ -17,7 +17,7 @@ class Storage {
 
   static async takeFromStorage(name: string) {
     try {
-      await localStorage.getItem(name)
+      return await localStorage.getItem(name)
     } catch (e) {
       console.log(e)
     }
