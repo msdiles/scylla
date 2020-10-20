@@ -151,7 +151,6 @@ class AuthControllerApi {
       const [user, session] = await AuthController.getInfoAboutUserThroughToken(
         token
       )
-      console.log(user, session)
       await AuthController.checkSessionIsValid(session, fingerprint)
       const tokenData = await AuthController.getTokenPayload(user)
       const [accessToken, refreshToken] = await Promise.all([
@@ -199,8 +198,6 @@ class AuthControllerApi {
   ): Promise<void> {
     try {
       const { resetId, resetDate } = req.body.data
-      console.log(resetId, resetDate)
-
       const isToken = await AuthController.checkResetToken(resetId, resetDate)
       if (isToken) {
         res.status(200).send({ success: true })
@@ -224,7 +221,6 @@ class AuthControllerApi {
 
       if (isToken) {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
-        console.log(hashedPassword)
         await AuthController.changePassword(resetId, resetDate, hashedPassword)
         res.status(200).send({ success: true })
       } else {

@@ -64,7 +64,7 @@ class AuthController {
 
   static async createAccessToken(
     payload: User,
-    time: string = "10s"
+    time: string = "10m"
   ): Promise<string> {
     try {
       return await this.asyncSign(
@@ -142,7 +142,6 @@ class AuthController {
   ): Promise<[IUser, ISession]> {
     try {
       const session = await Session.findOne({ refreshToken: token })
-      console.log(session)
       if (!session) {
         throw new HTTPException(403, "Not found token")
       }

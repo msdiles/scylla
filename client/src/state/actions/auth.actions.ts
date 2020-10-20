@@ -12,6 +12,7 @@ import {
   AuthActionTypes,
   GetUserInfoRequestedPayload,
   GetUserInfoSucceededPayload,
+  RefreshRequestedPayload,
   RefreshSucceededPayload,
   SignInRequestedPayload,
   SignInSucceededPayload,
@@ -35,8 +36,9 @@ export const logoutSucceeded = () => ({
   type: AUTH_LOGOUT_SUCCEEDED,
 })
 
-export const refreshRequested = () => ({
+export const refreshRequested = (payload?: RefreshRequestedPayload) => ({
   type: AUTH_REFRESH_REQUESTED,
+  payload,
 })
 
 export const refreshSucceeded = (payload: RefreshSucceededPayload) => ({

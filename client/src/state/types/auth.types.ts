@@ -54,9 +54,14 @@ interface LogoutSucceededAction {
 //
 
 //Refresh
+export interface RefreshRequestedPayload {
+  action: any
+  data: any
+}
 
 export interface RefreshRequestedAction {
   type: typeof AUTH_REFRESH_REQUESTED
+  payload?: RefreshRequestedPayload
 }
 
 export interface RefreshSucceededPayload {
@@ -111,6 +116,7 @@ interface StartLoadingAction {
 interface EndLoadingAction {
   type: typeof AUTH_END_LOADING
 }
+
 //
 
 export type AuthActionTypes =

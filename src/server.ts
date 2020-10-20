@@ -7,6 +7,7 @@ import cors from "cors"
 import App from "./app"
 import mongoConnect from "./utils/mongoConnect"
 import AuthRouter from "./routers/auth.routes"
+import BookmarkRouter from "./routers/bookmark.routes"
 
 const app = new App({
   port: 3000,
@@ -18,7 +19,7 @@ const app = new App({
     express.urlencoded({ extended: true }),
     cors(),
   ],
-  routers: [new AuthRouter([])],
+  routers: [new AuthRouter([]), new BookmarkRouter([])],
 })
 
 mongoConnect()

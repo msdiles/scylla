@@ -1,0 +1,10 @@
+.link-list {
+  flex: 1 1 calc(50% - 1px);
+  height: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+

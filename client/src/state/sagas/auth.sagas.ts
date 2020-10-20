@@ -4,6 +4,8 @@ import {
   AUTH_LOGOUT_REQUESTED,
   AUTH_REFRESH_REQUESTED,
   AUTH_SIGN_IN_REQUESTED,
+  RefreshRequestedAction,
+  RefreshRequestedPayload,
   SignInRequestedAction,
 } from "../types/auth.types"
 import http from "@/http/http"
@@ -34,7 +36,7 @@ export function* signInRequestedSaga(action: SignInRequestedAction) {
       const result = yield response.json()
       yield put(signInSucceeded({ ...result }))
       yield call(Storage.setInStorage, "session", result.refreshToken)
-      yield put(redirect({ path: "/" }))
+      yield put(redirect({ path: "/home" }))
       yield put(setMessage({ message: result.message }))
     } else {
       throw new Error("Something went wrong")
@@ -52,7 +54,7 @@ export function* logoutRequestedSaga() {
     const token = yield call(Storage.takeFromStorage, "session")
     if (token) {
       const response = yield call(http, "/auth/logout", "POST", {
-        data: { token },
+        token,
       })
       const result = yield response.json()
       yield call(Storage.removeFromStorage, "session")
@@ -67,7 +69,7 @@ export function* logoutRequestedSaga() {
   }
 }
 
-export function* refreshRequestedSaga() {
+export function* refreshRequestedSaga(action: RefreshRequestedAction) {
   try {
     yield put(startLoadingAction())
     const token = yield call(Storage.takeFromStorage, "session")
@@ -91,10 +93,13 @@ export function* refreshRequestedSaga() {
           })
         )
         yield call(Storage.setInStorage, "session", result.refreshToken)
+        console.log(action.payload)
+        if (action.payload) {
+          yield put(action.payload.action(action.payload.data))
+        }
       }
     } else {
       yield put(logoutSucceeded())
-      yield put(redirect({ path: "/login" }))
     }
   } catch (e) {
     yield put(setError({ error: e.message }))

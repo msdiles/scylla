@@ -1,0 +1,79 @@
+.link {
+  background-color: #eeeded;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  width: 80%;
+  cursor: pointer;
+  position: relative;
+  border-radius: 3px;
+  border: 2px solid #f4f3f3;
+  transition: all 300ms;
+  height: 3rem;
+
+  &:hover {
+    border: 2px solid #18A0FB;
+  }
+}
+
+.link__name {
+  border-right: 1px solid black;
+}
+
+.link__url {
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0 0 0.3rem;
+}
+
+.link__button-change {
+  opacity: 0.5;
+  position: absolute;
+  top: 0.5rem;
+  right: 4rem;
+  margin-left: 1rem !important;
+}
+
+
+.link__button-delete {
+  opacity: 0.5;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  margin-left: 1rem !important;
+}
+
+
+.link-enter {
+  height: 3rem;
+  transition: all 300ms;
+}
+
+.link-enter-active {
+  height: 4rem;
+}
+
+.link-enter-done {
+  height: 4rem;
+}
+
+.link-exit {
+  height: 4rem;
+  transition: all 300ms;
+}
+
+.link-exit-active {
+  height: 3rem;
+}
+
+
+.link__color-picker {
+
+}
+
+.link__color-item {
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+}

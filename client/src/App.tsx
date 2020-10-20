@@ -7,6 +7,7 @@ import { ConnectedRouter } from "connected-react-router"
 import SnackbarHandler from "@/components/SnackbarHandler"
 import { useDispatch } from "react-redux"
 import { refreshRequested } from "@/state/actions/auth.actions"
+import AppContextProvide from "@/components/AppContext"
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
@@ -16,10 +17,12 @@ const App: React.FC = () => {
   }, [])
   return (
     <div className="app">
-      <ConnectedRouter history={history}>
-        <Router />
-        <SnackbarHandler />
-      </ConnectedRouter>
+      <AppContextProvide>
+        <ConnectedRouter history={history}>
+          <Router />
+          <SnackbarHandler />
+        </ConnectedRouter>
+      </AppContextProvide>
     </div>
   )
 }
