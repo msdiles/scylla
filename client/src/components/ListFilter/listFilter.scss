@@ -1,0 +1,48 @@
+.list-filter {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  bottom: 0;
+  width: 4rem;
+}
+
+.link-filter__toggle {
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.link-filter__toggle_active {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.link-filter__menu {
+  transform: translateX(-100%);
+}
+
+.link-filter__divider{
+  height: 1px;
+  border: 1px solid rgba(34, 36, 38, 0.25);
+}
+
+.filter-enter {
+  transform: translateX(-100%);
+  transition: all 300ms;
+}
+
+.filter-enter-active {
+  transform: translateX(0);
+}
+
+.filter-enter-done {
+  transform: translateX(0);
+}
+
+.filter-exit {
+  transform: translateX(0);
+}
+
+.filter-exit-active {
+  transform: translateX(-100%);
+  transition: all 300ms;
+}

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import AuthController from "./auth.controller"
 import bcrypt from "bcrypt"
 import { HTTPException } from "../interfaces/HTTPExtensions"
+import { Bookmark } from "../models/Bookmark"
 
 const saltRounds = 10
 
@@ -37,7 +38,12 @@ class AuthControllerApi {
           target: email,
         })
       } else {
-        await AuthController.registerUser(username, email, hashedPassword)
+        const user = await AuthController.registerUser(
+          username,
+          email,
+          hashedPassword
+        )
+        await Bookmark.create({ userId: user._id, links: [], folders: [] })
         res.status(200).send({
           success: true,
           message: "You have successfully registered",

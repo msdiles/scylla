@@ -24,17 +24,24 @@ class BookmarkRouter extends Router {
     )
     this.router.post(
       "/link/change",
-      BookmarkRules.changeLinkRules(),
+      BookmarkRules.deleteOrChangeLinkRules(),
       Validator.validate,
       AuthControllerApi.checkJWTMiddleware,
       BookmarkControllerApi.changeLink
     )
     this.router.post(
       "/link/delete",
-      BookmarkRules.deleteLinkRules(),
+      BookmarkRules.deleteOrChangeLinkRules(),
       Validator.validate,
       AuthControllerApi.checkJWTMiddleware,
       BookmarkControllerApi.deleteLink
+    )
+    this.router.post(
+      "/link/sequence",
+      BookmarkRules.linkSequenceRules(),
+      Validator.validate,
+      AuthControllerApi.checkJWTMiddleware,
+      BookmarkControllerApi.sequenceLink
     )
     this.router.post(
       "/folder/add",

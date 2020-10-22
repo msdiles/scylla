@@ -1,35 +1,49 @@
-import { color } from "@/types/types"
+import { Color } from "@/types/types"
 
 export interface ILink {
+  userId: string
+  _id: string
   url: string
   date: string
   folders: string[]
   name: string
-  _id?: string
-  color: color
-  userId: string
+  color: Color
+  favorite: boolean
 }
 
 export interface IFolder {
+  userId: string
+  _id: string
   date: string
   links: string[]
   name: string
   parent: string
-  _id: string
+  color: Color
+  favorite: boolean
 }
 
 export interface ILinkToAdd {
+  userId: string
   url: string
   date: string
-  folder: string[] | IFolder[]
+  folders: string[]
   name: string
-  _id?: string
+  color: Color
+  favorite: boolean
 }
 
 export interface IFolderToAdd {
+  userId: string
   date: string
-  links: string[] | ILink[]
+  links: string[]
   name: string
   parent: string
-  _id?: string
+  color: Color | ""
+  favorite: boolean
+}
+
+export interface IBookmarks {
+  userId: string
+  links: string[]
+  folders: string[]
 }

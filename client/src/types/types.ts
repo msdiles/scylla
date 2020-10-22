@@ -1,4 +1,4 @@
-export type color =
+export type Color =
   | "red"
   | "orange"
   | "yellow"
@@ -12,3 +12,6 @@ export type color =
   | "brown"
   | "grey"
   | "black"
+
+export type SortBy = "favorite" | "font" | "calendar" | "setting" | ""
+export type SortDirection = "sort content ascending" | "sort content descending"

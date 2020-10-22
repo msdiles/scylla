@@ -1,6 +1,6 @@
-import { color } from "../types/types"
+import { Color } from "../types/types"
 import random from "./rangom"
-const colors: color[] = [
+const colors: Color[] = [
   "red",
   "orange",
   "yellow",

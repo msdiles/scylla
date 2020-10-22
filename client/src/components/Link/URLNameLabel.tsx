@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { Label } from "semantic-ui-react"
 import Popup from "semantic-ui-react/dist/commonjs/modules/Popup"
-import { color } from "@/types/types"
+import { Color } from "@/types/types"
 import colors from "@/utils/colors"
+import { ILink } from "@/types/interfaces"
 
 interface IProps {
+  link: ILink
   expand: boolean
-  color: color
-  name: string
-  changeColor: (newColor: color) => void
+  changeColor: (newColor: Color) => void
 }
 
-const URLNameLabel = ({ expand, color, name, changeColor }: IProps) => {
+const URLNameLabel = ({ expand, link, changeColor }: IProps) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const URLNameLabel = ({ expand, color, name, changeColor }: IProps) => {
     }
   })
 
-  const setColor = (color: color) => {
+  const setColor = (color: Color) => {
     changeColor(color)
     setIsPopupOpen(false)
   }
@@ -29,9 +29,9 @@ const URLNameLabel = ({ expand, color, name, changeColor }: IProps) => {
       trigger={
         <Label
           className={expand ? "link__name link__name_opened" : "link__name"}
-          color={color}
+          color={link.color}
         >
-          {name}
+          {link.name}
         </Label>
       }
       content={

@@ -13,16 +13,8 @@ export class BookmarkRules {
       check("data.url").not().isEmpty().withMessage("URL is Empty").trim(),
     ]
   }
-  static changeLinkRules = () => {
-    return [
-      check("data.target._id")
-        .not()
-        .isEmpty()
-        .withMessage("Id is Empty")
-        .trim(),
-    ]
-  }
-  static deleteLinkRules = () => {
+
+  static deleteOrChangeLinkRules = () => {
     return [
       check("data.target.userId")
         .not()
@@ -65,6 +57,16 @@ export class BookmarkRules {
         .trim(),
       check("data.date").not().isEmpty().withMessage("Date is Empty").trim(),
       check("data.name").not().isEmpty().withMessage("Name is Empty").trim(),
+    ]
+  }
+  static linkSequenceRules = () => {
+    return [
+      check("data.userId")
+        .not()
+        .isEmpty()
+        .withMessage("UserId is Empty")
+        .trim(),
+      check("data.links").isArray(),
     ]
   }
   static getAll = () => {

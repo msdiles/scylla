@@ -1,9 +1,9 @@
-import React, { ReactNode, useState } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import { Form, Header } from "semantic-ui-react"
 import Button from "semantic-ui-react/dist/commonjs/elements/Button"
 import "./linkModal.scss"
 import Dropdown from "semantic-ui-react/dist/commonjs/modules/Dropdown"
-import { IFolder } from "@/types/interfaces"
+import { IFolder, ILink } from "@/types/interfaces"
 import Popup from "semantic-ui-react/dist/commonjs/modules/Popup"
 
 interface IProps {
@@ -13,9 +13,7 @@ interface IProps {
   trigger: ReactNode
   header: string
   buttonText: string
-  changeName?: string
-  changeUrl?: string
-  changeFolders?: string[]
+  link?: ILink
 }
 
 interface IState {
@@ -31,15 +29,22 @@ const LinkModal = ({
   trigger,
   header,
   buttonText,
-  changeFolders,
-  changeName,
-  changeUrl,
+  link,
 }: IProps) => {
   const [form, setForm] = useState<IState>({
-    name: changeName ?? "",
-    url: changeUrl ?? "",
-    folders: changeFolders ?? [],
+    name: "",
+    url: "",
+    folders: [],
   })
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    setForm({
+      name: (link && link.name) ?? "",
+      url: (link && link.url) ?? "",
+      folders: (link && link.folders) ?? [],
+    })
+  }, [link])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -49,14 +54,13 @@ const LinkModal = ({
     event: React.SyntheticEvent<HTMLElement, Event>,
     data: any
   ) => {
-    console.log(data)
-
     setForm({ ...form, folders: data.value })
   }
 
   const onSubmit = async (form: IState) => {
     await submitFunction(form)
     setForm({ name: "", url: "", folders: [] })
+    setIsModalOpen(false)
   }
 
   return (
@@ -66,6 +70,9 @@ const LinkModal = ({
       position="bottom center"
       on="click"
       trigger={trigger}
+      onOpen={() => setIsModalOpen(true)}
+      onClose={() => setIsModalOpen(false)}
+      open={isModalOpen}
     >
       <Header className={"text_centered"}>{header}</Header>
       <Form className="add-form">

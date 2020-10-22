@@ -1,4 +1,11 @@
-import { IFolder, ILink } from "@/types/interfaces"
+import {
+  IBookmarks,
+  IFolder,
+  IFolderToAdd,
+  ILink,
+  ILinkToAdd,
+} from "@/types/interfaces"
+import { SortBy, SortDirection } from "@/types/types"
 
 export const BOOKMARK_ADD_LINK_REQUESTED = "BOOKMARK_ADD_LINK_REQUESTED"
 export const BOOKMARK_ADD_LINK_SUCCEEDED = "BOOKMARK_ADD_LINK_SUCCEEDED"
@@ -23,16 +30,25 @@ export const BOOKMARK_GET_ALL_SUCCEEDED = "BOOKMARK_GET_ALL_SUCCEEDED"
 export const BOOKMARK_START_LOADING = "BOOKMARK_START_LOADING"
 export const BOOKMARK_END_LOADING = "BOOKMARK_END_LOADING"
 
+export const BOOKMARK_LINK_SET_SORT_BY = "BOOKMARK_LINK_SET_SORT_BY"
+export const BOOKMARK_LINK_SET_SORT_DIRECTION =
+  "BOOKMARK_LINK_SET_SORT_DIRECTION"
+
+export const BOOKMARK_FOLDER_SET_SORT_BY = "BOOKMARK_FOLDER_SET_SORT_BY"
+export const BOOKMARK_FOLDER_SET_SORT_DIRECTION =
+  "BOOKMARK_FOLDER_SET_SORT_DIRECTION"
+
+export const BOOKMARK_LINKS_SORT = "BOOKMARK_LINKS_SORT"
+export const BOOKMARK_FOLDERS_SORT = "BOOKMARK_FOLDERS_SORT"
+
+export const BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED =
+  "BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED"
+export const BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED =
+  "BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED"
+
 //AddLink
 export interface AddLinkRequestedPayload {
-  data: {
-    userId: string
-    date: Date
-    url: string
-    folders: string[] | []
-    name: string
-    color: string
-  }
+  data: ILinkToAdd
 }
 
 export interface AddLinkRequestedAction {
@@ -53,7 +69,6 @@ interface AddLinkSucceededAction {
 //ChangeLink
 export interface ChangeLinkRequestedPayload {
   data: {
-    id: string
     target: ILink
   }
 }
@@ -97,12 +112,7 @@ interface DeleteLinkSucceededAction {
 
 //AddFolder
 export interface AddFolderRequestedPayload {
-  data: {
-    userId: string
-    date: Date
-    parent: string
-    name: string
-  }
+  data: IFolderToAdd
 }
 
 export interface AddFolderRequestedAction {
@@ -160,6 +170,7 @@ export interface GetAllSucceededPayload {
   data: {
     links: ILink[]
     folders: IFolder[]
+    bookmarks: IBookmarks
   }
 }
 
@@ -182,6 +193,54 @@ interface EndLoadingBookmarkAction {
 
 //
 
+//SortLinks
+export interface SortLinksPayload {
+  sortBy: SortBy
+  sortDirection: SortDirection
+}
+
+interface SortLinksAction {
+  type: typeof BOOKMARK_LINKS_SORT
+  payload: SortLinksPayload
+}
+
+//SortFolders
+export interface SortFoldersPayload {
+  sortBy: SortBy
+  sortDirection: SortDirection
+}
+
+interface SortFoldersAction {
+  type: typeof BOOKMARK_FOLDERS_SORT
+  payload: SortFoldersPayload
+}
+
+//ChangeLinksDirectionRequested
+export interface ChangeLinksDirectionRequestedPayload {
+  forChange: {
+    links: string[]
+    source: number
+    destination: number
+  }
+  userId: string
+}
+
+export interface ChangeLinksDirectionRequestedAction {
+  type: typeof BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED
+  payload: ChangeLinksDirectionRequestedPayload
+}
+
+//ChangeLinksDirectionSucceeded
+export interface ChangeLinksDirectionSucceededPayload {
+  success: boolean
+  target: string[]
+}
+
+export interface ChangeLinksDirectionSucceededAction {
+  type: typeof BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED
+  payload: ChangeLinksDirectionSucceededPayload
+}
+
 export type BookmarkActionTypes =
   | AddLinkRequestedAction
   | AddLinkSucceededAction
@@ -197,3 +256,7 @@ export type BookmarkActionTypes =
   | GetAllSucceededAction
   | StartLoadingBookmarkAction
   | EndLoadingBookmarkAction
+  | SortLinksAction
+  | SortFoldersAction
+  | ChangeLinksDirectionRequestedAction
+  | ChangeLinksDirectionSucceededAction

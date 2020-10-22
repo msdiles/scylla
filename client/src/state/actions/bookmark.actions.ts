@@ -13,19 +13,26 @@ import {
   BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED,
   BOOKMARK_CHANGE_LINK_REQUESTED,
   BOOKMARK_CHANGE_LINK_SUCCEEDED,
+  BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED,
+  BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED,
   BOOKMARK_DELETE_LINK_REQUESTED,
   BOOKMARK_DELETE_LINK_SUCCEEDED,
   BOOKMARK_END_LOADING,
+  BOOKMARK_FOLDERS_SORT,
   BOOKMARK_GET_ALL_REQUESTED,
   BOOKMARK_GET_ALL_SUCCEEDED,
+  BOOKMARK_LINKS_SORT,
   BOOKMARK_START_LOADING,
-  BookmarkActionTypes,
   ChangeLinkRequestedPayload,
+  ChangeLinksDirectionRequestedPayload,
+  ChangeLinksDirectionSucceededPayload,
   ChangeLinkSucceededPayload,
   DeleteLinkRequestedPayload,
   DeleteLinkSucceededPayload,
   GetAllRequestedPayload,
   GetAllSucceededPayload,
+  SortFoldersPayload,
+  SortLinksPayload,
 } from "@/state/types/bookmark.types"
 
 export const addLinkRequested = (payload: AddLinkRequestedPayload) => ({
@@ -92,9 +99,33 @@ export const getAllSucceeded = (payload: GetAllSucceededPayload) => ({
   payload,
 })
 
-export const startLoadingBookmarkAction = (): BookmarkActionTypes => ({
+export const startLoadingBookmarkAction = () => ({
   type: BOOKMARK_START_LOADING,
 })
-export const endLoadingBookmarkAction = (): BookmarkActionTypes => ({
+export const endLoadingBookmarkAction = () => ({
   type: BOOKMARK_END_LOADING,
+})
+
+export const sortLinks = (payload: SortLinksPayload) => ({
+  type: BOOKMARK_LINKS_SORT,
+  payload,
+})
+
+export const sortFolders = (payload: SortFoldersPayload) => ({
+  type: BOOKMARK_FOLDERS_SORT,
+  payload,
+})
+
+export const changeLinksDirectionRequested = (
+  payload: ChangeLinksDirectionRequestedPayload
+) => ({
+  type: BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED,
+  payload,
+})
+
+export const changeLinksDirectionSucceeded = (
+  payload: ChangeLinksDirectionSucceededPayload
+) => ({
+  type: BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED,
+  payload,
 })

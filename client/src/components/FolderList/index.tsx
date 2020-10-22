@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { addFolderRequested } from "@/state/actions/bookmark.actions"
 import { RootState } from "@/state/reducers"
 
-const FolderLsit = () => {
+const FolderList = () => {
   const dispatch = useDispatch()
   const userId = useSelector((state: RootState) => state.auth.userId)
   return (
@@ -12,7 +12,15 @@ const FolderLsit = () => {
         onClick={() =>
           dispatch(
             addFolderRequested({
-              data: { userId, date: new Date(), name: "Folder4", parent: "" },
+              data: {
+                userId,
+                date: Date.now().toString(),
+                name: "Folder4",
+                parent: "",
+                links: [],
+                color: "",
+                favorite: false,
+              },
             })
           )
         }
@@ -21,4 +29,4 @@ const FolderLsit = () => {
   )
 }
 
-export default FolderLsit
+export default FolderList

@@ -27,15 +27,15 @@ class AuthController {
     login: string,
     email: string,
     password: string
-  ): Promise<void> {
+  ): Promise<IUser> {
     try {
-      await User.create({
+      const user = await User.create({
         username: login,
         email,
         password,
         userRole: [roles.user],
       })
-      return
+      return user
     } catch (e) {
       throw new HTTPException(
         500,

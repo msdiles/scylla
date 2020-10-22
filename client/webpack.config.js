@@ -2,8 +2,28 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const webpack = require("webpack")
 const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const OptimizeCssAssetWebpackPlugin = require("optimize-css-assets-webpack-plugin")
+const TerserWebpackPlugin = require("terser-webpack-plugin")
 const path = require("path")
 
+const isDev = process.env.NODE_ENV === "development"
+const isProd = process.env.NODE_ENV === "production"
+
+const optimization = () => {
+  const config = {
+    runtimeChunk: "single",
+    splitChunks: {
+      chunks: "all",
+    },
+  }
+  if (isProd) {
+    config.minimizer = [
+      new OptimizeCssAssetWebpackPlugin(),
+      new TerserWebpackPlugin(),
+    ]
+  }
+  return config
+}
 module.exports = {
   entry: {
     main: path.join(__dirname, "src/index.tsx"),
@@ -24,7 +44,13 @@ module.exports = {
       {
         test: /\s?css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: isDev,
+              reloadAll: true,
+            },
+          },
           { loader: "css-loader" },
           { loader: "sass-loader" },
         ],
@@ -46,29 +72,26 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      minify: {
+        collapseWhitespace: isProd,
+      },
     }),
     new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsPlugin(),
     new MiniCssExtractPlugin({ filename: "[name].css" }),
   ],
   mode: "development",
-  devtool: "eval-cheap-module-source-map",
-  optimization: {
-    runtimeChunk: "single",
-    splitChunks: {
-      chunks: "all",
-    },
-  },
+  devtool: isDev ? "eval-cheap-module-source-map" : "",
+  optimization: optimization(),
   devServer: {
     compress: true,
     historyApiFallback: true,
-    hot: true,
+    hot: isDev,
     open: true,
     overlay: true,
     port: 8000,
     stats: {
       normal: true,
     },
-    progress: true,
   },
 }
