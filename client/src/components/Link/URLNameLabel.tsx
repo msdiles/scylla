@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Label } from "semantic-ui-react"
 import Popup from "semantic-ui-react/dist/commonjs/modules/Popup"
+import Label from "semantic-ui-react/dist/commonjs/elements/Label"
 import { Color } from "@/types/types"
 import colors from "@/utils/colors"
 import { ILink } from "@/types/interfaces"
@@ -24,6 +24,7 @@ const URLNameLabel = ({ expand, link, changeColor }: IProps) => {
     changeColor(color)
     setIsPopupOpen(false)
   }
+
   return (
     <Popup
       trigger={

@@ -1,11 +1,11 @@
 {
   "name": "scylla-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE-ENV=development webpack-dev-server --mode development",
-    "build": "cross-env NODE-ENV=production webpack --mode production",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
     "test": "jest",
     "test:watch": "jest --watch"
   },

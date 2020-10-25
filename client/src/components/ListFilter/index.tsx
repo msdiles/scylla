@@ -1,34 +1,27 @@
 import React, { useState } from "react"
-import "./listFilter.scss"
-import { Menu } from "semantic-ui-react"
-import Icon from "semantic-ui-react/dist/commonjs/elements/Icon"
-import classNames from "@/utils/classNames"
 import CSSTransition from "react-transition-group/CSSTransition"
-import Popup from "semantic-ui-react/dist/commonjs/modules/Popup"
-import { SortBy, SortDirection } from "@/types/types"
 import { useDispatch, useSelector } from "react-redux"
+import Menu from "semantic-ui-react/dist/commonjs/collections/Menu"
+import Icon from "semantic-ui-react/dist/commonjs/elements/Icon"
+import Popup from "semantic-ui-react/dist/commonjs/modules/Popup"
+import classNames from "@/utils/classNames"
+import { SortBy, SortDirection } from "@/types/types"
 import { sortLinks } from "@/state/actions/bookmark.actions"
 import { RootState } from "@/state/reducers"
+import "./listFilter.scss"
 
 const ListFilter = () => {
   const [isOpen, setIsOpen] = useState(false)
-  // const [sortBy, setSortBy] = useState<SortBy>("favorite")
-  // const [sortDirection, setSortDirection] = useState<SortDirection>(
-  //   "sort content ascending"
-  // )
-  //
   const { sortBy, sortDirection } = useSelector(
     (state: RootState) => state.bookmark.linkSort
   )
   const dispatch = useDispatch()
 
   const changeSortBy = (option: SortBy) => {
-    // setSortBy(option)
     dispatch(sortLinks({ sortBy: option, sortDirection }))
   }
 
   const changeSortDirection = (option: SortDirection) => {
-    // setSortDirection(option)
     dispatch(sortLinks({ sortBy, sortDirection: option }))
   }
 
@@ -139,5 +132,5 @@ const ListFilter = () => {
     </div>
   )
 }
-//TODO rework to Menu from Semantic UI
+
 export default ListFilter

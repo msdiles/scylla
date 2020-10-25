@@ -35,11 +35,11 @@ const initialState: BookmarkState = {
   folders: [],
   loading: false,
   linkSort: {
-    sortBy: "favorite",
+    sortBy: "setting",
     sortDirection: "sort content ascending",
   },
   folderSort: {
-    sortBy: "favorite",
+    sortBy: "setting",
     sortDirection: "sort content ascending",
   },
   bookmarks: {

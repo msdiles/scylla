@@ -8,7 +8,6 @@ interface Props {
 }
 
 const PageLoader = ({ loading, inverted }: Props) => {
-  console.log("Asd")
   return (
     <div className="page-loader">
       <Dimmer active={loading} inverted={inverted}>

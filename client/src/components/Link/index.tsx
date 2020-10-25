@@ -1,186 +1,138 @@
-import React, { useEffect, useState } from "react"
-import { ILink } from "@/types/interfaces"
-import "./link.scss"
+import React from "react"
+import { useSelector } from "react-redux"
+import { Draggable, DraggableProvided } from "react-beautiful-dnd"
+import CSSTransition from "react-transition-group/CSSTransition"
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon"
 import Button from "semantic-ui-react/dist/commonjs/elements/Button"
-import CSSTransition from "react-transition-group/CSSTransition"
-import { Color } from "@/types/types"
+import { ILink } from "@/types/interfaces"
+import { RootState } from "@/state/reducers"
+import classNames from "@/utils/classNames"
 import URLNameLabel from "@/components/Link/URLNameLabel"
 import LinkModal from "@/components/LinkModal"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "@/state/reducers"
-import {
-  changeLinkRequested,
-  deleteLinkRequested,
-} from "@/state/actions/bookmark.actions"
-import classNames from "@/utils/classNames"
-import { Draggable } from "react-beautiful-dnd"
+import useLink from "@/components/Link/useLink"
+import "./link.scss"
 
 interface IProps {
   link: ILink
   index: number
 }
 
-interface IState {
-  name: string
-  url: string
-  folders: string[] | []
-}
-
 const Link = ({ link, index }: IProps) => {
-  const [expand, setExpand] = useState(false)
-  const [isDeleteMessageOpen, setIsDeleteMessageOpen] = useState(false)
+  const {
+    openUrl,
+    changeColor,
+    changeLink,
+    deleteLink,
+    toggleFavorite,
+    OnMouseLeave,
+    expand,
+    setExpand,
+    isDeleteMessageOpen,
+    setIsDeleteMessageOpen,
+  } = useLink(link)
   const { folders, loading } = useSelector((state: RootState) => state.bookmark)
-  const dispatch = useDispatch()
-
-  const openUrl = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    if (e.target === e.currentTarget) {
-      window.open(link.url, "_blank")
-    }
-  }
-
-  const changeColor = (newColor: Color) => {
-    dispatch(
-      changeLinkRequested({
-        data: {
-          target: {
-            ...link,
-            color: newColor,
-          },
-        },
-      })
-    )
-  }
-
-  const changeLink = (form: IState) => {
-    dispatch(
-      changeLinkRequested({
-        data: {
-          target: {
-            ...link,
-            url: form.url,
-            name: form.name,
-            folders: form.folders,
-          },
-        },
-      })
-    )
-  }
-
-  const deleteLink = () => {
-    dispatch(
-      deleteLinkRequested({
-        data: {
-          target: {
-            ...link,
-          },
-        },
-      })
-    )
-  }
-
-  const toggleFavorite = () => {
-    dispatch(
-      changeLinkRequested({
-        data: {
-          target: {
-            ...link,
-            favorite: !link.favorite,
-          },
-        },
-      })
-    )
-  }
-
   return (
     <Draggable draggableId={link._id} index={index}>
-      {(provided) => (
-        // <CSSTransition in={expand} timeout={300} classNames="link">
+      {(provided: DraggableProvided) => (
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={
-            "link" +
-            classNames({
-              link_favorite: link.favorite,
-              link_delete: isDeleteMessageOpen,
-              link_expand: expand,
-            })
+            "link-draggable" + classNames({ "link-draggable_expand": expand })
           }
-          onMouseOver={(e) => setExpand(true)}
-          onMouseLeave={(e) => {
-            setExpand(false)
-            setIsDeleteMessageOpen(false)
-          }}
-          // onClick={(e) => openUrl(e)}
         >
-          <URLNameLabel expand={expand} link={link} changeColor={changeColor} />
+          <div
+            className={
+              "link" +
+              classNames({
+                link_favorite: link.favorite,
+                link_delete: isDeleteMessageOpen,
+                link_expand: expand,
+              })
+            }
+            onMouseOver={() => setExpand(true)}
+            onMouseLeave={OnMouseLeave}
+          >
+            <URLNameLabel
+              expand={expand}
+              link={link}
+              changeColor={changeColor}
+            />
 
-          {expand && (
-            <>
-              <p className="link__url">{link.url}</p>
+            {expand && (
+              <>
+                <p className="link__url">{link.url}</p>
 
-              <Button
-                icon
-                className="link__button-favorite"
-                color={link.favorite ? "yellow" : undefined}
-                onClick={toggleFavorite}
-              >
-                <Icon name="favorite" />
-              </Button>
+                <Button
+                  icon
+                  className="link__button-open-url"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                    openUrl(e)
+                  }
+                >
+                  <Icon name="external alternate" />
+                </Button>
 
-              <LinkModal
-                folders={folders}
-                submitFunction={changeLink}
-                loading={loading}
-                header={"Change Bookmark"}
-                buttonText={"Change"}
-                link={link}
-                trigger={
-                  <Button icon className="link__button-change">
-                    <Icon name="write" />
-                  </Button>
-                }
-              />
+                <Button
+                  icon
+                  className="link__button-favorite"
+                  color={link.favorite ? "yellow" : undefined}
+                  onClick={toggleFavorite}
+                >
+                  <Icon name="favorite" />
+                </Button>
 
-              <Button
-                icon
-                className="link__button-delete"
-                onClick={() => {
-                  setIsDeleteMessageOpen(true)
-                }}
-              >
-                <Icon name="close" />
-              </Button>
+                <LinkModal
+                  folders={folders}
+                  submitFunction={changeLink}
+                  loading={loading}
+                  header={"Change Bookmark"}
+                  buttonText={"Change"}
+                  link={link}
+                  trigger={
+                    <Button icon className="link__button-change">
+                      <Icon name="write" />
+                    </Button>
+                  }
+                />
 
-              <CSSTransition
-                in={isDeleteMessageOpen}
-                timeout={300}
-                classNames={"delete"}
-              >
-                <div className="link__delete-message">
-                  <Button
-                    className="link__button-delete-cancel"
-                    onClick={() => setIsDeleteMessageOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    primary
-                    negative
-                    className="link__button-delete-confirm"
-                    onClick={deleteLink}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </CSSTransition>
-            </>
-          )}
+                <Button
+                  icon
+                  className="link__button-delete"
+                  onClick={() => {
+                    setIsDeleteMessageOpen(true)
+                  }}
+                >
+                  <Icon name="close" />
+                </Button>
+
+                <CSSTransition
+                  in={isDeleteMessageOpen}
+                  timeout={300}
+                  classNames={"delete"}
+                >
+                  <div className="link__delete-message">
+                    <Button
+                      className="link__button-delete-cancel"
+                      onClick={() => setIsDeleteMessageOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      primary
+                      negative
+                      className="link__button-delete-confirm"
+                      onClick={deleteLink}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </CSSTransition>
+              </>
+            )}
+          </div>
         </div>
-        // </CSSTransition>
       )}
     </Draggable>
   )

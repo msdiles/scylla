@@ -1,0 +1,95 @@
+.folder {
+  width: 15%;
+  margin: 2rem;
+  height: 5rem;
+  position: relative;
+  border: 1px solid #eed9ac;
+  border-radius: 0 5px 5px;
+  background-color: lemonchiffon;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 300ms;
+
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: -1px;
+    width: 80%;
+    height: 10px;
+    box-shadow: 1px -1px 1px 0 #EED9AC inset;
+    background-color: lemonchiffon;
+    border: 1px solid #E7D7B6;
+    border-radius: 5px 5px 0 0;
+
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 50%;
+    height: 8px;
+    background-color: lemonchiffon;
+    border-right: 1px solid #E7D7B6;
+    border-bottom: 1px solid #E7D7B6;
+    box-shadow: -1px -1px 0 0 #EED9AC inset;
+    border-radius: 0 0 10px 0;
+  }
+}
+
+.folder__name {
+  color: black;
+
+}
+
+.folder_add {
+  opacity: 0.5;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.folder__link-list {
+  background-color: #EEEDED;
+  width: 20rem;
+  max-height: 20rem;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 10;
+  transform: scale(0);
+  transition: all 400ms;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.folder__link-list_expand {
+  transform: scale(1);
+  transition: all 400ms;
+}
+
+.folder-link {
+  padding-bottom:0.5rem ;
+}
+
+.folder__link-list-names{
+  overflow-y: auto;
+}
+
+.folder-link__url{
+  cursor: pointer;
+}
+
+.folder-buttons{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

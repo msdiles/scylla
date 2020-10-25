@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect } from "react"
-import { AuthAccess } from "@/types/enums"
 import { useSelector } from "react-redux"
+import { useHistory } from "react-router-dom"
+import { AuthAccess } from "@/types/enums"
 import { RootState } from "@/state/reducers"
 import PageLoader from "@/components/PageLoader"
-import { useHistory } from "react-router-dom"
 
 interface IProps {
   children: ReactNode
