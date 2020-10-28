@@ -3,13 +3,16 @@ import {
   BOOKMARK_ADD_FOLDER_SUCCEEDED,
   BOOKMARK_ADD_LINK_SUCCEEDED,
   BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED,
+  BOOKMARK_CHANGE_FOLDER_SUCCEEDED,
   BOOKMARK_CHANGE_LINK_SUCCEEDED,
   BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED,
+  BOOKMARK_DELETE_FOLDER_SUCCEEDED,
   BOOKMARK_DELETE_LINK_SUCCEEDED,
   BOOKMARK_END_LOADING,
   BOOKMARK_FOLDERS_SORT,
   BOOKMARK_GET_ALL_SUCCEEDED,
   BOOKMARK_LINKS_SORT,
+  BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED,
   BOOKMARK_START_LOADING,
   BookmarkActionTypes,
 } from "@/state/types/bookmark.types"
@@ -39,7 +42,7 @@ const initialState: BookmarkState = {
     sortDirection: "sort content ascending",
   },
   folderSort: {
-    sortBy: "setting",
+    sortBy: "favorite",
     sortDirection: "sort content ascending",
   },
   bookmarks: {
@@ -109,6 +112,46 @@ const bookmarkReducer = (state = initialState, action: BookmarkActionTypes) => {
           folders: [...state.bookmarks.folders, action.payload.target._id],
         },
       }
+    case BOOKMARK_CHANGE_FOLDER_SUCCEEDED:
+      return {
+        ...state,
+        folders: [
+          ...(state.folders as IFolder[]).map((folder: IFolder) => {
+            if (folder._id === action.payload.target._id) {
+              return action.payload.target
+            }
+            return folder
+          }),
+        ],
+      }
+    case BOOKMARK_DELETE_FOLDER_SUCCEEDED:
+      return {
+        ...state,
+        folders: [
+          ...state.folders.filter(
+            (folder: IFolder) => folder._id !== action.payload.target._id
+          ),
+        ],
+        links: [
+          ...(state.links as ILink[]).map((link) => {
+            if (action.payload.target.links.includes(link._id)) {
+              return {
+                ...link,
+                folders: link.folders.filter(
+                  (folder) => folder !== action.payload.target._id
+                ),
+              }
+            }
+            return link
+          }),
+        ],
+        bookmarks: {
+          ...state.bookmarks,
+          links: state.bookmarks.links.filter(
+            (link) => link !== action.payload.target._id
+          ),
+        },
+      }
     case BOOKMARK_GET_ALL_SUCCEEDED:
       return {
         ...state,
@@ -119,12 +162,49 @@ const bookmarkReducer = (state = initialState, action: BookmarkActionTypes) => {
     case BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED:
       return {
         ...state,
+        links: (state.links as ILink[]).map((link) => {
+          if (link._id === action.payload.target.link) {
+            return {
+              ...link,
+              folders: [...link.folders, action.payload.target.folder],
+            }
+          }
+          return link
+        }),
         folders: [
           ...(state.folders as IFolder[]).map((folder: IFolder) => {
-            if (folder._id === action.payload.folder) {
+            if (folder._id === action.payload.target.folder) {
               return {
                 ...folder,
-                links: [...folder.links, action.payload.link],
+                links: [...folder.links, action.payload.target.link],
+              }
+            }
+            return folder
+          }),
+        ],
+      }
+    case BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED:
+      return {
+        ...state,
+        links: (state.links as ILink[]).map((link) => {
+          if (link._id === action.payload.target.link) {
+            return {
+              ...link,
+              folders: link.folders.filter(
+                (folder) => folder !== action.payload.target.folder
+              ),
+            }
+          }
+          return link
+        }),
+        folders: [
+          ...(state.folders as IFolder[]).map((folder: IFolder) => {
+            if (folder._id === action.payload.target.folder) {
+              return {
+                ...folder,
+                links: folder.links.filter(
+                  (link) => link !== action.payload.target.link
+                ),
               }
             }
             return folder

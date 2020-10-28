@@ -18,7 +18,6 @@ interface IFolder extends mongoose.Document {
   name: string
   links: string[] | []
   parent: string
-  color: string
   favorite: boolean
 }
 
@@ -50,7 +49,6 @@ const folderSchema = new Schema({
   links: [{ type: Schema.Types.ObjectId, ref: "Link" }],
   name: { type: String, required: true },
   parent: { type: String },
-  color: { type: String, required: true },
   favorite: { type: Boolean, required: true },
 })
 

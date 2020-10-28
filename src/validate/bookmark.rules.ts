@@ -48,6 +48,32 @@ export class BookmarkRules {
         .trim(),
     ]
   }
+
+  static deleteOrChangeFolderRules = () => {
+    return [
+      check("data.target.userId")
+        .not()
+        .isEmpty()
+        .withMessage("UserId is Empty")
+        .trim(),
+      check("data.target.date")
+        .not()
+        .isEmpty()
+        .withMessage("Date is Empty")
+        .trim(),
+      check("data.target.name")
+        .not()
+        .isEmpty()
+        .withMessage("Name is Empty")
+        .trim(),
+      check("data.target._id")
+        .not()
+        .isEmpty()
+        .withMessage("_ID is Empty")
+        .trim(),
+    ]
+  }
+
   static addFolderRules = () => {
     return [
       check("data.userId")
@@ -75,6 +101,17 @@ export class BookmarkRules {
         .not()
         .isEmpty()
         .withMessage("UserId is Empty")
+        .trim(),
+    ]
+  }
+
+  static addOrRemoveLinkToFromFolder = () => {
+    return [
+      check("data.link").not().isEmpty().withMessage("Link is Empty").trim(),
+      check("data.folder")
+        .not()
+        .isEmpty()
+        .withMessage("Folder is Empty")
         .trim(),
     ]
   }

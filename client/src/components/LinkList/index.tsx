@@ -10,15 +10,16 @@ import "./linkList.scss"
 
 interface IProps {
   linksSequence: string[]
+  width: number
 }
 
-const LinkList = ({ linksSequence }: IProps) => {
+const LinkList = ({ linksSequence, width }: IProps) => {
   const { loading, items, folders, addLink } = useLinkList(linksSequence)
 
   return (
-    <div className="link-list">
+    <div className="link-list" style={{ width: `${width}px` }}>
       <h2 className="text_centered">Unfiltered Bookmarks</h2>
-      <ListFilter />
+      <ListFilter filterTarget="link" />
       <Droppable droppableId="links">
         {(provided) => (
           <div

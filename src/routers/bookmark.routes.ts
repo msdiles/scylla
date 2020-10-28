@@ -44,11 +44,39 @@ class BookmarkRouter extends Router {
       BookmarkControllerApi.sequenceLink
     )
     this.router.post(
+      "/link/add-to-folder",
+      BookmarkRules.addOrRemoveLinkToFromFolder(),
+      Validator.validate,
+      AuthControllerApi.checkJWTMiddleware,
+      BookmarkControllerApi.addLinkToFolder
+    )
+    this.router.post(
+      "/link/remove-from-folder",
+      BookmarkRules.addOrRemoveLinkToFromFolder(),
+      Validator.validate,
+      AuthControllerApi.checkJWTMiddleware,
+      BookmarkControllerApi.removeLinkFromFolder
+    )
+    this.router.post(
       "/folder/add",
       BookmarkRules.addFolderRules(),
       Validator.validate,
       AuthControllerApi.checkJWTMiddleware,
       BookmarkControllerApi.addFolder
+    )
+    this.router.post(
+      "/folder/change",
+      BookmarkRules.deleteOrChangeFolderRules(),
+      Validator.validate,
+      AuthControllerApi.checkJWTMiddleware,
+      BookmarkControllerApi.changeFolder
+    )
+    this.router.post(
+      "/folder/delete",
+      BookmarkRules.deleteOrChangeFolderRules(),
+      Validator.validate,
+      AuthControllerApi.checkJWTMiddleware,
+      BookmarkControllerApi.deleteFolder
     )
     this.router.post(
       "/all",

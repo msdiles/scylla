@@ -19,10 +19,25 @@ export const BOOKMARK_DELETE_LINK_SUCCEEDED = "BOOKMARK_DELETE_LINK_SUCCEEDED"
 export const BOOKMARK_ADD_FOLDER_REQUESTED = "BOOKMARK_ADD_FOLDER_REQUESTED"
 export const BOOKMARK_ADD_FOLDER_SUCCEEDED = "BOOKMARK_ADD_FOLDER_SUCCEEDED"
 
+export const BOOKMARK_CHANGE_FOLDER_REQUESTED =
+  "BOOKMARK_CHANGE_FOLDER_REQUESTED"
+export const BOOKMARK_CHANGE_FOLDER_SUCCEEDED =
+  "BOOKMARK_CHANGE_FOLDER_SUCCEEDED"
+
+export const BOOKMARK_DELETE_FOLDER_REQUESTED =
+  "BOOKMARK_DELETE_FOLDER_REQUESTED"
+export const BOOKMARK_DELETE_FOLDER_SUCCEEDED =
+  "BOOKMARK_DELETE_FOLDER_SUCCEEDED"
+
 export const BOOKMARK_ADD_LINK_TO_FOLDER_REQUESTED =
   "BOOKMARK_ADD_LINK_TO_FOLDER_REQUESTED"
 export const BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED =
   "BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED"
+
+export const BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED =
+  "BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED"
+export const BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED =
+  "BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED"
 
 export const BOOKMARK_GET_ALL_REQUESTED = "BOOKMARK_GET_ALL_REQUESTED"
 export const BOOKMARK_GET_ALL_SUCCEEDED = "BOOKMARK_GET_ALL_SUCCEEDED"
@@ -30,13 +45,13 @@ export const BOOKMARK_GET_ALL_SUCCEEDED = "BOOKMARK_GET_ALL_SUCCEEDED"
 export const BOOKMARK_START_LOADING = "BOOKMARK_START_LOADING"
 export const BOOKMARK_END_LOADING = "BOOKMARK_END_LOADING"
 
-export const BOOKMARK_LINK_SET_SORT_BY = "BOOKMARK_LINK_SET_SORT_BY"
-export const BOOKMARK_LINK_SET_SORT_DIRECTION =
-  "BOOKMARK_LINK_SET_SORT_DIRECTION"
-
-export const BOOKMARK_FOLDER_SET_SORT_BY = "BOOKMARK_FOLDER_SET_SORT_BY"
-export const BOOKMARK_FOLDER_SET_SORT_DIRECTION =
-  "BOOKMARK_FOLDER_SET_SORT_DIRECTION"
+// export const BOOKMARK_LINK_SET_SORT_BY = "BOOKMARK_LINK_SET_SORT_BY"
+// export const BOOKMARK_LINK_SET_SORT_DIRECTION =
+//   "BOOKMARK_LINK_SET_SORT_DIRECTION"
+//
+// export const BOOKMARK_FOLDER_SET_SORT_BY = "BOOKMARK_FOLDER_SET_SORT_BY"
+// export const BOOKMARK_FOLDER_SET_SORT_DIRECTION =
+//   "BOOKMARK_FOLDER_SET_SORT_DIRECTION"
 
 export const BOOKMARK_LINKS_SORT = "BOOKMARK_LINKS_SORT"
 export const BOOKMARK_FOLDERS_SORT = "BOOKMARK_FOLDERS_SORT"
@@ -130,6 +145,50 @@ interface AddFolderSucceededAction {
   payload: AddFolderSucceededPayload
 }
 
+//ChangeFolder
+export interface ChangeFolderRequestedPayload {
+  data: {
+    target: IFolder
+  }
+}
+
+export interface ChangeFolderRequestedAction {
+  type: typeof BOOKMARK_CHANGE_FOLDER_REQUESTED
+  payload: ChangeFolderRequestedPayload
+}
+
+export interface ChangeFolderSucceededPayload {
+  success: boolean
+  target: IFolder
+}
+
+interface ChangeFolderSucceededAction {
+  type: typeof BOOKMARK_CHANGE_FOLDER_SUCCEEDED
+  payload: ChangeFolderSucceededPayload
+}
+
+//DeleteFolder
+export interface DeleteFolderRequestedPayload {
+  data: {
+    target: IFolder
+  }
+}
+
+export interface DeleteFolderRequestedAction {
+  type: typeof BOOKMARK_DELETE_FOLDER_REQUESTED
+  payload: DeleteFolderRequestedPayload
+}
+
+export interface DeleteFolderSucceededPayload {
+  success: boolean
+  target: IFolder
+}
+
+interface DeleteFolderSucceededAction {
+  type: typeof BOOKMARK_DELETE_FOLDER_SUCCEEDED
+  payload: DeleteFolderSucceededPayload
+}
+
 //AddLinkToFolder
 export interface AddLinkToFolderRequestedPayload {
   data: {
@@ -144,13 +203,42 @@ export interface AddLinkToFolderRequestedAction {
 }
 
 export interface AddLinkToFolderSucceededPayload {
-  link: string
-  folder: string
+  success: boolean
+  target: {
+    link: string
+    folder: string
+  }
 }
 
 interface AddLinkToFolderSucceededAction {
   type: typeof BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED
   payload: AddLinkToFolderSucceededPayload
+}
+
+//RemoveLinkFromFolder
+export interface RemoveLinkFromFolderRequestedPayload {
+  data: {
+    link: string
+    folder: string
+  }
+}
+
+export interface RemoveLinkFromFolderRequestedAction {
+  type: typeof BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED
+  payload: RemoveLinkFromFolderRequestedPayload
+}
+
+export interface RemoveLinkFromFolderSucceededPayload {
+  success: boolean
+  target: {
+    link: string
+    folder: string
+  }
+}
+
+interface RemoveLinkFromFolderSucceededAction {
+  type: typeof BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED
+  payload: RemoveLinkFromFolderSucceededPayload
 }
 
 //GetAll
@@ -250,8 +338,14 @@ export type BookmarkActionTypes =
   | DeleteLinkSucceededAction
   | AddFolderRequestedAction
   | AddFolderSucceededAction
+  | ChangeFolderRequestedAction
+  | ChangeFolderSucceededAction
+  | DeleteFolderRequestedAction
+  | DeleteFolderSucceededAction
   | AddLinkToFolderRequestedAction
   | AddLinkToFolderSucceededAction
+  | RemoveLinkFromFolderRequestedAction
+  | RemoveLinkFromFolderSucceededAction
   | GetAllRequestedAction
   | GetAllSucceededAction
   | StartLoadingBookmarkAction

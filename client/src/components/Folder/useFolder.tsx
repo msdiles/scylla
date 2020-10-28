@@ -1,8 +1,16 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { IFolder } from "@/types/interfaces"
 import formatFoldersLinks from "@/utils/formatFoldersLinks"
 import { RootState } from "@/state/reducers"
+import {
+  changeFolderRequested,
+  deleteFolderRequested,
+} from "@/state/actions/bookmark.actions"
+
+interface IState {
+  name: string
+}
 
 const useFolder = (folder: IFolder) => {
   const [expand, setExpand] = useState(false)
@@ -10,9 +18,14 @@ const useFolder = (folder: IFolder) => {
   const { links: linksFromState, loading } = useSelector(
     (state: RootState) => state.bookmark
   )
+
   const [links, setLinks] = useState(
     formatFoldersLinks(folder.links, linksFromState)
   )
+
+  useEffect(() => {
+    setLinks(formatFoldersLinks(folder.links, linksFromState))
+  }, [folder.links])
 
   const dispatch = useDispatch()
 
@@ -21,11 +34,35 @@ const useFolder = (folder: IFolder) => {
     setIsDeleteMessageOpen(false)
   }
 
-  const toggleFavorite = () => {}
+  const toggleFavorite = () => {
+    dispatch(
+      changeFolderRequested({
+        data: {
+          target: {
+            ...folder,
+            favorite: !folder.favorite,
+          },
+        },
+      })
+    )
+  }
 
-  const changeFolder = () => {}
+  const changeFolder = (form: IState) => {
+    dispatch(
+      changeFolderRequested({
+        data: {
+          target: {
+            ...folder,
+            name: form.name,
+          },
+        },
+      })
+    )
+  }
 
-  const deleteFolder = () => {}
+  const deleteFolder = () => {
+    dispatch(deleteFolderRequested({ data: { target: { ...folder } } }))
+  }
 
   return {
     OnMouseLeave,

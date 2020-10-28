@@ -1,10 +1,10 @@
-.link-draggable{
+.link-draggable {
   height: 3rem;
-  margin-bottom:  1rem;
+  margin-bottom: 1rem;
   transition: margin-bottom 300ms;
 }
 
-.link-draggable_expand{
+.link-draggable_expand {
   margin-bottom: 2rem;
   transition: margin-bottom 300ms;
 }
@@ -26,34 +26,54 @@
   }
 }
 
-.link_delete{
+.link_delete {
   &:hover {
     border: 2px solid red;
   }
 }
 
-.link_favorite{
-  background-color: rgba(255,215,0,0.5);
+.link_favorite {
+  background-color: rgba(255, 215, 0, 0.5);
+
   &:hover {
     border: 2px solid gold;
   }
 }
 
-.link_expand{
+.link_expand {
   height: 4rem;
 }
 
 .link__name {
+  max-width: 100%;
   border-right: 1px solid black;
   cursor: pointer;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
 }
 
 .link__url {
   color: rgba(0, 0, 0, 0.4);
   margin: 0 0 0.3rem;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.link__button-open-url{
+.link__button-add-to-folder {
+  opacity: 0.5;
+  position: absolute;
+  top: 0.5rem;
+  right: 14.5rem;
+  margin-left: 1rem !important;
+}
+
+.link__button-open-url {
   opacity: 0.5;
   position: absolute;
   top: 0.5rem;
@@ -61,7 +81,7 @@
   margin-left: 1rem !important;
 }
 
-.link__button-favorite{
+.link__button-favorite {
   opacity: 0.5;
   position: absolute;
   top: 0.5rem;

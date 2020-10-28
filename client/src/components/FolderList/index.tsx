@@ -1,48 +1,42 @@
 import React from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { addFolderRequested } from "@/state/actions/bookmark.actions"
-import { RootState } from "@/state/reducers"
 import "./folderList.scss"
-import { Droppable, DroppableProvided } from "react-beautiful-dnd"
 import { IFolder } from "@/types/interfaces"
 import Folder from "@/components/Folder"
 import { Icon } from "semantic-ui-react"
 import FolderModal from "@/components/FolderModal"
 import useFolderList from "@/components/FolderList/useFolderList"
+import ListFilter from "@/components/ListFilter"
 
-const FolderList = () => {
-  const userId = useSelector((state: RootState) => state.auth.userId)
-  const { folders, loading } = useSelector((state: RootState) => state.bookmark)
-  const { addFolder } = useFolderList()
+interface IProps {
+  foldersSequence: string[]
+  width: number
+}
+
+const FolderList = ({ foldersSequence, width }: IProps) => {
+  console.log(width)
+  const { addFolder, items, loading } = useFolderList(foldersSequence)
   return (
-    <div className="folder-list">
+    <div className="folder-list" style={{ width: `${width}px` }}>
       <h2 className="text_centered">Folders</h2>
-      <Droppable droppableId="folders">
-        {(provided: DroppableProvided) => (
-          <div
-            className="folder-drag-and-drop"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {(folders as IFolder[]).map((folder: IFolder, index: number) => {
-              if (folder) {
-                return <Folder folder={folder} key={folder._id} index={index} />
-              }
-            })}
-            <FolderModal
-              submitFunction={addFolder}
-              loading={loading}
-              trigger={
-                <div className="folder folder_add">
-                  <Icon circular name="add" size="large" />
-                </div>
-              }
-              header="Add folder"
-              buttonText="Add"
-            />
-          </div>
-        )}
-      </Droppable>
+      <ListFilter filterTarget="folder" />
+      <div className="folder-drag-and-drop">
+        {(items as IFolder[]).map((folder: IFolder) => {
+          if (folder) {
+            return <Folder folder={folder} key={folder._id} />
+          }
+        })}
+        <FolderModal
+          submitFunction={addFolder}
+          loading={loading}
+          trigger={
+            <div className="folder-main folder_add">
+              <Icon circular name="add" size="large" />
+            </div>
+          }
+          header="Add folder"
+          buttonText="Add"
+        />
+      </div>
     </div>
   )
 }

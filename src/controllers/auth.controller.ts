@@ -64,7 +64,7 @@ class AuthController {
 
   static async createAccessToken(
     payload: User,
-    time: string = "10m"
+    time: string = "60m"
   ): Promise<string> {
     try {
       return await this.asyncSign(
@@ -89,7 +89,7 @@ class AuthController {
       const token = await this.asyncSign(
         { user: payload },
         process.env.REFRESH_SECRET_KEY as string,
-        { expiresIn: "12m" }
+        { expiresIn: "30d" }
       )
       await Session.create({
         refreshToken: token,

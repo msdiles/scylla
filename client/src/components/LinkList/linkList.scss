@@ -1,6 +1,7 @@
 .link-list {
   position: relative;
-  flex: 1 1 calc(50% - 1px);
+  //flex: 1 1 calc(50% - 1px);
+  width: calc(50% - 1px);
   height: 100%;
   padding: 1rem;
   display: flex;

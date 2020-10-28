@@ -11,10 +11,14 @@ import {
   BOOKMARK_ADD_LINK_SUCCEEDED,
   BOOKMARK_ADD_LINK_TO_FOLDER_REQUESTED,
   BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED,
+  BOOKMARK_CHANGE_FOLDER_REQUESTED,
+  BOOKMARK_CHANGE_FOLDER_SUCCEEDED,
   BOOKMARK_CHANGE_LINK_REQUESTED,
   BOOKMARK_CHANGE_LINK_SUCCEEDED,
   BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED,
   BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED,
+  BOOKMARK_DELETE_FOLDER_REQUESTED,
+  BOOKMARK_DELETE_FOLDER_SUCCEEDED,
   BOOKMARK_DELETE_LINK_REQUESTED,
   BOOKMARK_DELETE_LINK_SUCCEEDED,
   BOOKMARK_END_LOADING,
@@ -22,15 +26,23 @@ import {
   BOOKMARK_GET_ALL_REQUESTED,
   BOOKMARK_GET_ALL_SUCCEEDED,
   BOOKMARK_LINKS_SORT,
+  BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED,
+  BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED,
   BOOKMARK_START_LOADING,
+  ChangeFolderRequestedPayload,
+  ChangeFolderSucceededPayload,
   ChangeLinkRequestedPayload,
   ChangeLinksDirectionRequestedPayload,
   ChangeLinksDirectionSucceededPayload,
   ChangeLinkSucceededPayload,
+  DeleteFolderRequestedPayload,
+  DeleteFolderSucceededPayload,
   DeleteLinkRequestedPayload,
   DeleteLinkSucceededPayload,
   GetAllRequestedPayload,
   GetAllSucceededPayload,
+  RemoveLinkFromFolderRequestedPayload,
+  RemoveLinkFromFolderSucceededPayload,
   SortFoldersPayload,
   SortLinksPayload,
 } from "@/state/types/bookmark.types"
@@ -65,6 +77,34 @@ export const deleteLinkSucceeded = (payload: DeleteLinkSucceededPayload) => ({
   payload,
 })
 
+export const changeFolderRequested = (
+  payload: ChangeFolderRequestedPayload
+) => ({
+  type: BOOKMARK_CHANGE_FOLDER_REQUESTED,
+  payload,
+})
+
+export const changeFolderSucceeded = (
+  payload: ChangeFolderSucceededPayload
+) => ({
+  type: BOOKMARK_CHANGE_FOLDER_SUCCEEDED,
+  payload,
+})
+
+export const deleteFolderRequested = (
+  payload: DeleteFolderRequestedPayload
+) => ({
+  type: BOOKMARK_DELETE_FOLDER_REQUESTED,
+  payload,
+})
+
+export const deleteFolderSucceeded = (
+  payload: DeleteFolderSucceededPayload
+) => ({
+  type: BOOKMARK_DELETE_FOLDER_SUCCEEDED,
+  payload,
+})
+
 export const addFolderRequested = (payload: AddFolderRequestedPayload) => ({
   type: BOOKMARK_ADD_FOLDER_REQUESTED,
   payload,
@@ -86,6 +126,20 @@ export const addLinkToFolderSucceeded = (
   payload: AddLinkToFolderSucceededPayload
 ) => ({
   type: BOOKMARK_ADD_LINK_TO_FOLDER_SUCCEEDED,
+  payload,
+})
+
+export const removeLinkFromFolderRequested = (
+  payload: RemoveLinkFromFolderRequestedPayload
+) => ({
+  type: BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED,
+  payload,
+})
+
+export const removeLinkFromFolderSucceeded = (
+  payload: RemoveLinkFromFolderSucceededPayload
+) => ({
+  type: BOOKMARK_REMOVE_LINK_FROM_FOLDER_SUCCEEDED,
   payload,
 })
 

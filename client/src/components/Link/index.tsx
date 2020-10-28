@@ -11,6 +11,7 @@ import URLNameLabel from "@/components/Link/URLNameLabel"
 import LinkModal from "@/components/LinkModal"
 import useLink from "@/components/Link/useLink"
 import "./link.scss"
+import AddFolderPopup from "@/components/Link/AddFolderPopup"
 
 interface IProps {
   link: ILink
@@ -23,6 +24,7 @@ const Link = ({ link, index }: IProps) => {
     changeColor,
     changeLink,
     deleteLink,
+    changeFolders,
     toggleFavorite,
     OnMouseLeave,
     expand,
@@ -63,6 +65,20 @@ const Link = ({ link, index }: IProps) => {
             {expand && (
               <>
                 <p className="link__url">{link.url}</p>
+
+                <AddFolderPopup
+                  folders={folders}
+                  trigger={
+                    <Button icon className="link__button-add-to-folder">
+                      <Icon name="folder" />
+                    </Button>
+                  }
+                  header={"Change folders"}
+                  buttonText={"Change"}
+                  link={link}
+                  loading={loading}
+                  onSubmit={(newFolders) => changeFolders(newFolders, link)}
+                />
 
                 <Button
                   icon

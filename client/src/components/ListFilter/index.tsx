@@ -6,32 +6,56 @@ import Icon from "semantic-ui-react/dist/commonjs/elements/Icon"
 import Popup from "semantic-ui-react/dist/commonjs/modules/Popup"
 import classNames from "@/utils/classNames"
 import { SortBy, SortDirection } from "@/types/types"
-import { sortLinks } from "@/state/actions/bookmark.actions"
+import { sortFolders, sortLinks } from "@/state/actions/bookmark.actions"
 import { RootState } from "@/state/reducers"
 import "./listFilter.scss"
 
-const ListFilter = () => {
+interface IProps {
+  filterTarget: "link" | "folder"
+}
+
+const ListFilter = ({ filterTarget }: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const { sortBy, sortDirection } = useSelector(
-    (state: RootState) => state.bookmark.linkSort
-  )
+  const { sortBy, sortDirection } = useSelector((state: RootState) => {
+    if (filterTarget === "link") {
+      return state.bookmark.linkSort
+    } else {
+      return state.bookmark.folderSort
+    }
+  })
   const dispatch = useDispatch()
 
   const changeSortBy = (option: SortBy) => {
-    dispatch(sortLinks({ sortBy: option, sortDirection }))
+    if (filterTarget === "link") {
+      dispatch(sortLinks({ sortBy: option, sortDirection }))
+    } else {
+      dispatch(sortFolders({ sortBy: option, sortDirection }))
+    }
   }
 
   const changeSortDirection = (option: SortDirection) => {
-    dispatch(sortLinks({ sortBy, sortDirection: option }))
+    if (filterTarget === "link") {
+      dispatch(sortLinks({ sortBy, sortDirection: option }))
+    } else {
+      dispatch(sortFolders({ sortBy, sortDirection: option }))
+    }
   }
 
   return (
-    <div className="list-filter">
+    <div
+      className={
+        "list-filter" +
+        classNames({
+          "list-filter_link": filterTarget === "link",
+          "list-filter_folder": filterTarget === "folder",
+        })
+      }
+    >
       <Menu compact>
         <Menu.Item
           className={classNames({
-            "link-filter__toggle": true,
-            "link-filter__toggle_active": isOpen,
+            filter__toggle: true,
+            filter__toggle_active: isOpen,
           })}
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -39,8 +63,20 @@ const ListFilter = () => {
         </Menu.Item>
       </Menu>
 
-      <CSSTransition timeout={300} in={isOpen} classNames={"filter"}>
-        <Menu icon vertical className="link-filter__menu">
+      <CSSTransition
+        timeout={300}
+        in={isOpen}
+        classNames={filterTarget === "link" ? "filter-links" : "filter-folders"}
+      >
+        <Menu
+          icon
+          vertical
+          className={
+            filterTarget === "link"
+              ? "filter-links__menu"
+              : "filter-folders__menu"
+          }
+        >
           <Popup
             content="Sort by favorite"
             basic
@@ -83,21 +119,23 @@ const ListFilter = () => {
               </Menu.Item>
             }
           />
-          <Popup
-            content="Custom sort"
-            basic
-            position="right center"
-            trigger={
-              <Menu.Item
-                name="setting"
-                active={sortBy === "setting"}
-                onClick={() => changeSortBy("setting")}
-              >
-                <Icon name="setting" />
-              </Menu.Item>
-            }
-          />
-          <div className="link-filter__divider"></div>
+          {filterTarget === "link" && (
+            <Popup
+              content="Custom sort"
+              basic
+              position="right center"
+              trigger={
+                <Menu.Item
+                  name="setting"
+                  active={sortBy === "setting"}
+                  onClick={() => changeSortBy("setting")}
+                >
+                  <Icon name="setting" />
+                </Menu.Item>
+              }
+            />
+          )}
+          <div className="filter__divider"></div>
           <Popup
             content="Sort ascending"
             basic

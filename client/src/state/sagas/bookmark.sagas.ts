@@ -1,14 +1,24 @@
 import { put, takeEvery, call, select, all } from "redux-saga/effects"
 import {
   AddLinkRequestedAction,
+  AddLinkToFolderRequestedAction,
   BOOKMARK_ADD_FOLDER_REQUESTED,
   BOOKMARK_ADD_LINK_REQUESTED,
+  BOOKMARK_ADD_LINK_TO_FOLDER_REQUESTED,
+  BOOKMARK_CHANGE_FOLDER_REQUESTED,
   BOOKMARK_CHANGE_LINK_REQUESTED,
   BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED,
+  BOOKMARK_DELETE_FOLDER_REQUESTED,
   BOOKMARK_DELETE_LINK_REQUESTED,
   BOOKMARK_GET_ALL_REQUESTED,
+  BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED,
+  ChangeFolderRequestedAction,
+  ChangeLinkRequestedAction,
   ChangeLinksDirectionRequestedAction,
+  DeleteFolderRequestedAction,
+  DeleteLinkRequestedAction,
   GetAllRequestedAction,
+  RemoveLinkFromFolderRequestedAction,
 } from "@/state/types/bookmark.types"
 import { setError, setMessage } from "@/state/actions/app.actions"
 import {
@@ -16,16 +26,23 @@ import {
   addFolderSucceeded,
   addLinkRequested,
   addLinkSucceeded,
+  addLinkToFolderRequested,
   addLinkToFolderSucceeded,
+  changeFolderRequested,
+  changeFolderSucceeded,
   changeLinkRequested,
   changeLinksDirectionRequested,
   changeLinksDirectionSucceeded,
   changeLinkSucceeded,
+  deleteFolderRequested,
+  deleteFolderSucceeded,
   deleteLinkRequested,
   deleteLinkSucceeded,
   endLoadingBookmarkAction,
   getAllRequested,
   getAllSucceeded,
+  removeLinkFromFolderRequested,
+  removeLinkFromFolderSucceeded,
   startLoadingBookmarkAction,
 } from "@/state/actions/bookmark.actions"
 import http from "@/http/http"
@@ -60,7 +77,10 @@ export function* addLinkRequestedSaga(action: AddLinkRequestedAction) {
       yield all(
         (action.payload.data.folders as any).map((folder: string) => {
           return put(
-            addLinkToFolderSucceeded({ link: result.target._id, folder })
+            addLinkToFolderSucceeded({
+              success: true,
+              target: { link: result.target._id, folder },
+            })
           )
         })
       )
@@ -73,7 +93,7 @@ export function* addLinkRequestedSaga(action: AddLinkRequestedAction) {
   }
 }
 
-export function* changeLinkRequestedSaga(action: AddLinkRequestedAction) {
+export function* changeLinkRequestedSaga(action: ChangeLinkRequestedAction) {
   try {
     yield put(startLoadingBookmarkAction())
     const token = yield select(getAccessToken)
@@ -103,7 +123,7 @@ export function* changeLinkRequestedSaga(action: AddLinkRequestedAction) {
   }
 }
 
-export function* deleteLinkRequestedSaga(action: AddLinkRequestedAction) {
+export function* deleteLinkRequestedSaga(action: DeleteLinkRequestedAction) {
   try {
     yield put(startLoadingBookmarkAction())
     const token = yield select(getAccessToken)
@@ -134,6 +154,77 @@ export function* deleteLinkRequestedSaga(action: AddLinkRequestedAction) {
   }
 }
 
+export function* changeFolderRequestedSaga(
+  action: ChangeFolderRequestedAction
+) {
+  try {
+    yield put(startLoadingBookmarkAction())
+    const token = yield select(getAccessToken)
+    const response = yield call(
+      http,
+      "/bookmark/folder/change",
+      "POST",
+      {
+        ...action.payload.data,
+      },
+      { Authorization: `bearer ${token}` }
+    )
+    if (response.status === 401) {
+      yield put(
+        refreshRequested({
+          action: changeFolderRequested,
+          data: action.payload,
+        })
+      )
+    } else {
+      if (response.status > 200) throw new Error("Something went wrong")
+      const result = yield response.json()
+      yield put(changeFolderSucceeded({ ...result }))
+      yield put(setMessage({ message: "Folder changed" }))
+    }
+  } catch (e) {
+    yield put(setError({ error: e.message }))
+  } finally {
+    yield put(endLoadingBookmarkAction())
+  }
+}
+
+export function* deleteFolderRequestedSaga(
+  action: DeleteFolderRequestedAction
+) {
+  try {
+    yield put(startLoadingBookmarkAction())
+    const token = yield select(getAccessToken)
+    const response = yield call(
+      http,
+      "/bookmark/folder/delete",
+      "POST",
+      {
+        ...action.payload.data,
+      },
+      { Authorization: `bearer ${token}` }
+    )
+    if (response.status === 401) {
+      yield put(
+        refreshRequested({
+          action: deleteFolderRequested,
+          data: action.payload,
+        })
+      )
+    } else {
+      if (response.status > 200) throw new Error("Something went wrong")
+      const result = yield response.json()
+      yield put(deleteFolderSucceeded({ ...result }))
+
+      yield put(setMessage({ message: "Folder deleted" }))
+    }
+  } catch (e) {
+    yield put(setError({ error: e.message }))
+  } finally {
+    yield put(endLoadingBookmarkAction())
+  }
+}
+
 export function* addFolderRequestedSaga(action: AddLinkRequestedAction) {
   try {
     yield put(startLoadingBookmarkAction())
@@ -156,6 +247,76 @@ export function* addFolderRequestedSaga(action: AddLinkRequestedAction) {
       const result = yield response.json()
       yield put(addFolderSucceeded({ ...result }))
       yield put(setMessage({ message: "Folder created" }))
+    }
+  } catch (e) {
+    yield put(setError({ error: e.message }))
+  } finally {
+    yield put(endLoadingBookmarkAction())
+  }
+}
+
+export function* addLinkToFolderRequestedSaga(
+  action: AddLinkToFolderRequestedAction
+) {
+  try {
+    yield put(startLoadingBookmarkAction())
+    const token = yield select(getAccessToken)
+    const response = yield call(
+      http,
+      "/bookmark/link/add-to-folder",
+      "POST",
+      {
+        ...action.payload.data,
+      },
+      { Authorization: `bearer ${token}` }
+    )
+    if (response.status === 401) {
+      yield put(
+        refreshRequested({
+          action: addLinkToFolderRequested,
+          data: action.payload,
+        })
+      )
+    } else {
+      if (response.status > 200) throw new Error("Something went wrong")
+      const result = yield response.json()
+      yield put(addLinkToFolderSucceeded({ ...result }))
+      yield put(setMessage({ message: "Bookmark added to folder" }))
+    }
+  } catch (e) {
+    yield put(setError({ error: e.message }))
+  } finally {
+    yield put(endLoadingBookmarkAction())
+  }
+}
+
+export function* removeLinkFromFolderRequestedSaga(
+  action: RemoveLinkFromFolderRequestedAction
+) {
+  try {
+    yield put(startLoadingBookmarkAction())
+    const token = yield select(getAccessToken)
+    const response = yield call(
+      http,
+      "/bookmark/link/remove-from-folder",
+      "POST",
+      {
+        ...action.payload.data,
+      },
+      { Authorization: `bearer ${token}` }
+    )
+    if (response.status === 401) {
+      yield put(
+        refreshRequested({
+          action: removeLinkFromFolderRequested,
+          data: action.payload,
+        })
+      )
+    } else {
+      if (response.status > 200) throw new Error("Something went wrong")
+      const result = yield response.json()
+      yield put(removeLinkFromFolderSucceeded({ ...result }))
+      yield put(setMessage({ message: "Bookmark removed from folder" }))
     }
   } catch (e) {
     yield put(setError({ error: e.message }))
@@ -202,7 +363,7 @@ export function* changeLinksDirectionSaga(
     const links = yield call(changeLinksPosition, {
       ...action.payload.forChange,
     })
-    yield put(changeLinksDirectionSucceeded({ target: links, success: true }))
+    // yield put(changeLinksDirectionSucceeded({ target: links, success: true }))
     const response = yield call(
       http,
       "/bookmark/link/sequence",
@@ -223,7 +384,7 @@ export function* changeLinksDirectionSaga(
     } else {
       if (response.status > 200) throw new Error("Something went wrong")
       const result = yield response.json()
-      // yield put(changeLinksDirectionSucceeded({ ...result }))
+      yield put(changeLinksDirectionSucceeded({ ...result }))
     }
   } catch (e) {
     yield put(setError({ error: e.message }))
@@ -237,6 +398,16 @@ export default function* () {
   yield takeEvery(BOOKMARK_CHANGE_LINK_REQUESTED, changeLinkRequestedSaga)
   yield takeEvery(BOOKMARK_DELETE_LINK_REQUESTED, deleteLinkRequestedSaga)
   yield takeEvery(BOOKMARK_ADD_FOLDER_REQUESTED, addFolderRequestedSaga)
+  yield takeEvery(BOOKMARK_CHANGE_FOLDER_REQUESTED, changeFolderRequestedSaga)
+  yield takeEvery(BOOKMARK_DELETE_FOLDER_REQUESTED, deleteFolderRequestedSaga)
+  yield takeEvery(
+    BOOKMARK_ADD_LINK_TO_FOLDER_REQUESTED,
+    addLinkToFolderRequestedSaga
+  )
+  yield takeEvery(
+    BOOKMARK_REMOVE_LINK_FROM_FOLDER_REQUESTED,
+    removeLinkFromFolderRequestedSaga
+  )
   yield takeEvery(BOOKMARK_GET_ALL_REQUESTED, getAllRequestedSaga)
   yield takeEvery(
     BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED,

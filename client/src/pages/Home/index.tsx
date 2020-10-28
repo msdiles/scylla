@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Input } from "semantic-ui-react"
 import "./home.scss"
 import LinkList from "@/components/LinkList"
 import { useDispatch, useSelector } from "react-redux"
 import {
   changeLinksDirectionRequested,
-  changeLinksDirectionSucceeded,
-  changeLinkSucceeded,
   getAllRequested,
   sortLinks,
 } from "@/state/actions/bookmark.actions"
@@ -14,13 +12,19 @@ import { RootState } from "@/state/reducers"
 import FolderLsit from "@/components/FolderList"
 import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import changeLinksPosition from "@/utils/changeLinksPosition"
+import Divider from "@/components/Divider"
 
 const Home = () => {
+  const ref = useRef<HTMLDivElement>(null)
   const [linksSequence, setLinksSequence] = useState<string[]>([])
+  const [foldersSequence, setFoldersSequence] = useState<string[]>([])
+  const [dividerPosition, setDividerPosition] = useState(
+    ref.current ? (ref.current.clientWidth - 2) / 2 : 0
+  )
   const dispatch = useDispatch()
   const userId = useSelector((state: RootState) => state.auth.userId)
-  const links = useSelector(
-    (state: RootState) => state.bookmark.bookmarks.links
+  const { links, folders } = useSelector(
+    (state: RootState) => state.bookmark.bookmarks
   )
   const sortDirection = useSelector(
     (state: RootState) => state.bookmark.linkSort.sortDirection
@@ -30,8 +34,15 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
+    setDividerPosition(ref.current ? (ref.current.clientWidth - 2) / 2 : 0)
+  }, [ref])
+
+  useEffect(() => {
     setLinksSequence(links)
   }, [links])
+  useEffect(() => {
+    setFoldersSequence(folders)
+  }, [folders])
 
   const onDragEnd = async (dropResult: DropResult) => {
     if (
@@ -61,7 +72,7 @@ const Home = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="home">
+      <div className="home" ref={ref}>
         <Input
           icon={{ name: "search", circular: true, link: true }}
           placeholder="Search..."
@@ -69,10 +80,13 @@ const Home = () => {
           className="home__search"
         />
 
-        <LinkList linksSequence={linksSequence} />
+        <LinkList linksSequence={linksSequence} width={dividerPosition} />
 
-        <div className="home-divider"></div>
-        <FolderLsit />
+        <Divider setDividerPosition={setDividerPosition} />
+        <FolderLsit
+          foldersSequence={foldersSequence}
+          width={ref.current ? ref.current.clientWidth - dividerPosition : 0}
+        />
       </div>
     </DragDropContext>
   )

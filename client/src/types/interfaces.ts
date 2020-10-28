@@ -18,7 +18,6 @@ export interface IFolder {
   links: string[]
   name: string
   parent: string
-  color: Color
   favorite: boolean
 }
 

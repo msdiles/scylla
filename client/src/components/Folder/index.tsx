@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import { IFolder, ILink } from "@/types/interfaces"
 import "./folder.scss"
 import useFolder from "@/components/Folder/useFolder"
@@ -6,16 +6,15 @@ import classNames from "@/utils/classNames"
 import Label from "semantic-ui-react/dist/commonjs/elements/Label"
 import Button from "semantic-ui-react/dist/commonjs/elements/Button"
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon"
-import LinkModal from "@/components/LinkModal"
 import CSSTransition from "react-transition-group/CSSTransition"
 import FolderModal from "../FolderModal"
+import FolderLink from "@/components/Folder/FolderLink"
 
 interface IProps {
   folder: IFolder
-  index: number
 }
 
-const Folder = ({ folder, index }: IProps) => {
+const Folder = ({ folder }: IProps) => {
   const {
     expand,
     setExpand,
@@ -29,9 +28,14 @@ const Folder = ({ folder, index }: IProps) => {
     loading,
   } = useFolder(folder)
 
+  useEffect(() => {
+    if (folder._id === "5f95b432ffa2321b00693ae9") {
+      console.log("REnder", folder)
+    }
+  })
   return (
     <div
-      className="folder"
+      className="folder-main"
       onMouseOver={() => setExpand(true)}
       onMouseLeave={() => OnMouseLeave()}
     >
@@ -44,18 +48,37 @@ const Folder = ({ folder, index }: IProps) => {
         }
       >
         <div className="folder__link-list-names">
-          {links.map((link: ILink) => (
-            <div className="folder-link" key={link._id}>
-              <Label className="folder-link__url" color={link.color}>
-                {link.name}
-              </Label>
+          {(links as ILink[]).map((link: ILink, index: number) => {
+            return <FolderLink link={link} folder={folder} key={link._id} />
+          })}
+          <CSSTransition
+            in={isDeleteMessageOpen}
+            timeout={300}
+            classNames={"delete"}
+          >
+            <div className="folder__delete-message">
+              <Button
+                className="folder__button-delete-cancel"
+                onClick={() => setIsDeleteMessageOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                primary
+                negative
+                className="folder__button-delete-confirm"
+                onClick={deleteFolder}
+              >
+                Delete
+              </Button>
             </div>
-          ))}
+          </CSSTransition>
         </div>
+
         <div className="folder-buttons">
           <Button
             icon
-            className="link__button-favorite"
+            className="folder__button-favorite"
             color={folder.favorite ? "yellow" : undefined}
             onClick={toggleFavorite}
           >
@@ -69,7 +92,7 @@ const Folder = ({ folder, index }: IProps) => {
             buttonText={"Change"}
             folder={folder}
             trigger={
-              <Button icon className="link__button-change">
+              <Button icon className="folder__button-change">
                 <Icon name="write" />
               </Button>
             }
@@ -77,40 +100,25 @@ const Folder = ({ folder, index }: IProps) => {
 
           <Button
             icon
-            className="link__button-delete"
+            className="folder__button-delete"
             onClick={() => {
               setIsDeleteMessageOpen(true)
             }}
           >
             <Icon name="close" />
           </Button>
-
-          <CSSTransition
-            in={isDeleteMessageOpen}
-            timeout={300}
-            classNames={"delete"}
-          >
-            <div className="link__delete-message">
-              <Button
-                className="link__button-delete-cancel"
-                onClick={() => setIsDeleteMessageOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                primary
-                negative
-                className="link__button-delete-confirm"
-                onClick={deleteFolder}
-              >
-                Delete
-              </Button>
-            </div>
-          </CSSTransition>
         </div>
       </div>
+
+      {folder.favorite && (
+        <Icon
+          className="folder-favorite-label"
+          name="favorite"
+          color="yellow"
+        />
+      )}
     </div>
   )
 }
 
-export default Folder
+export default React.memo(Folder)
