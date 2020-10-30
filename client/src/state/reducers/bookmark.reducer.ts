@@ -6,6 +6,7 @@ import {
   BOOKMARK_CHANGE_FOLDER_SUCCEEDED,
   BOOKMARK_CHANGE_LINK_SUCCEEDED,
   BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED,
+  BOOKMARK_CLEAR,
   BOOKMARK_DELETE_FOLDER_SUCCEEDED,
   BOOKMARK_DELETE_LINK_SUCCEEDED,
   BOOKMARK_END_LOADING,
@@ -243,6 +244,18 @@ const bookmarkReducer = (state = initialState, action: BookmarkActionTypes) => {
       return {
         ...state,
         loading: false,
+      }
+    case BOOKMARK_CLEAR:
+      return {
+        ...state,
+        links: [],
+        folders: [],
+        loading: false,
+        bookmarks: {
+          userId: "",
+          links: [],
+          folders: [],
+        },
       }
     default:
       return {

@@ -45,14 +45,6 @@ export const BOOKMARK_GET_ALL_SUCCEEDED = "BOOKMARK_GET_ALL_SUCCEEDED"
 export const BOOKMARK_START_LOADING = "BOOKMARK_START_LOADING"
 export const BOOKMARK_END_LOADING = "BOOKMARK_END_LOADING"
 
-// export const BOOKMARK_LINK_SET_SORT_BY = "BOOKMARK_LINK_SET_SORT_BY"
-// export const BOOKMARK_LINK_SET_SORT_DIRECTION =
-//   "BOOKMARK_LINK_SET_SORT_DIRECTION"
-//
-// export const BOOKMARK_FOLDER_SET_SORT_BY = "BOOKMARK_FOLDER_SET_SORT_BY"
-// export const BOOKMARK_FOLDER_SET_SORT_DIRECTION =
-//   "BOOKMARK_FOLDER_SET_SORT_DIRECTION"
-
 export const BOOKMARK_LINKS_SORT = "BOOKMARK_LINKS_SORT"
 export const BOOKMARK_FOLDERS_SORT = "BOOKMARK_FOLDERS_SORT"
 
@@ -60,6 +52,8 @@ export const BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED =
   "BOOKMARK_CHANGE_LINKS_DIRECTION_REQUESTED"
 export const BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED =
   "BOOKMARK_CHANGE_LINKS_DIRECTION_SUCCEEDED"
+
+export const BOOKMARK_CLEAR = "BOOKMARK_CLEAR"
 
 //AddLink
 export interface AddLinkRequestedPayload {
@@ -329,6 +323,12 @@ export interface ChangeLinksDirectionSucceededAction {
   payload: ChangeLinksDirectionSucceededPayload
 }
 
+//Clear
+
+export interface ClearAction {
+  type: typeof BOOKMARK_CLEAR
+}
+
 export type BookmarkActionTypes =
   | AddLinkRequestedAction
   | AddLinkSucceededAction
@@ -354,3 +354,4 @@ export type BookmarkActionTypes =
   | SortFoldersAction
   | ChangeLinksDirectionRequestedAction
   | ChangeLinksDirectionSucceededAction
+  | ClearAction

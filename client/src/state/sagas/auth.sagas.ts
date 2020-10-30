@@ -5,7 +5,6 @@ import {
   AUTH_REFRESH_REQUESTED,
   AUTH_SIGN_IN_REQUESTED,
   RefreshRequestedAction,
-  RefreshRequestedPayload,
   SignInRequestedAction,
 } from "../types/auth.types"
 import http from "@/http/http"
@@ -21,6 +20,7 @@ import {
 import { redirect, setError, setMessage } from "../actions/app.actions"
 import getFingerprint from "../../utils/getFingerprint"
 import Storage from "../../utils/Storage"
+import { clearBookmarks } from "@/state/actions/bookmark.actions"
 
 export function* signInRequestedSaga(action: SignInRequestedAction) {
   try {
@@ -61,6 +61,7 @@ export function* logoutRequestedSaga() {
       yield put(setMessage({ message: result.message }))
     }
     yield put(logoutSucceeded())
+    yield put(clearBookmarks())
     yield put(redirect({ path: "/" }))
   } catch (e) {
     yield put(setError({ error: e.message }))
@@ -84,6 +85,7 @@ export function* refreshRequestedSaga(action: RefreshRequestedAction) {
         yield call(Storage.removeFromStorage, "session")
         yield put(setMessage({ message: "Your session expired" }))
         yield put(logoutSucceeded())
+        yield put(clearBookmarks())
         yield put(redirect({ path: "/login" }))
       } else {
         yield put(
@@ -93,13 +95,13 @@ export function* refreshRequestedSaga(action: RefreshRequestedAction) {
           })
         )
         yield call(Storage.setInStorage, "session", result.refreshToken)
-        console.log(action.payload)
         if (action.payload) {
           yield put(action.payload.action(action.payload.data))
         }
       }
     } else {
       yield put(logoutSucceeded())
+      yield put(clearBookmarks())
     }
   } catch (e) {
     yield put(setError({ error: e.message }))
@@ -124,6 +126,7 @@ export function* getUserInfoRequestedSaga() {
       }
     } else {
       yield put(logoutSucceeded())
+      yield put(clearBookmarks())
       yield put(redirect({ path: "/" }))
     }
   } catch (e) {

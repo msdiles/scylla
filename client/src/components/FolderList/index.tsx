@@ -13,7 +13,6 @@ interface IProps {
 }
 
 const FolderList = ({ foldersSequence, width }: IProps) => {
-  console.log(width)
   const { addFolder, items, loading } = useFolderList(foldersSequence)
   return (
     <div className="folder-list" style={{ width: `${width}px` }}>
