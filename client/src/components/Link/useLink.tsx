@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Color } from "@/types/types"
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/state/actions/bookmark.actions"
 import { ILink } from "@/types/interfaces"
 import { RootState } from "@/state/reducers"
+import { AppContext } from "@/components/AppContext"
 
 interface IState {
   name: string
@@ -20,13 +21,18 @@ const useLink = (link: ILink) => {
   const [expand, setExpand] = useState(false)
   const [isDeleteMessageOpen, setIsDeleteMessageOpen] = useState(false)
   const folders = useSelector((state: RootState) => state.bookmark.folders)
+  const { expandLink } = useContext(AppContext)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (expandLink === link._id) {
+      setExpand(true)
+    }
+  }, [expandLink])
 
   const openUrl = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    if (e.target === e.currentTarget) {
-      window.open(link.url, "_blank")
-    }
+    window.open(link.url, "_blank")
   }
 
   const changeColor = (newColor: Color) => {

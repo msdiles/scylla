@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { IFolder } from "@/types/interfaces"
 import formatFoldersLinks from "@/utils/formatFoldersLinks"
@@ -7,6 +7,7 @@ import {
   changeFolderRequested,
   deleteFolderRequested,
 } from "@/state/actions/bookmark.actions"
+import { AppContext } from "@/components/AppContext"
 
 interface IState {
   name: string
@@ -18,6 +19,13 @@ const useFolder = (folder: IFolder) => {
   const { links: linksFromState, loading } = useSelector(
     (state: RootState) => state.bookmark
   )
+  const { expandFolder } = useContext(AppContext)
+
+  useEffect(() => {
+    if (expandFolder === folder._id) {
+      setExpand(true)
+    }
+  }, [expandFolder])
 
   const [links, setLinks] = useState(
     formatFoldersLinks(folder.links, linksFromState)

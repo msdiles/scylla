@@ -72,6 +72,7 @@
 .folder__link-list_expand {
   transform: scale(1);
   transition: all 400ms;
+  min-height: 5rem;
 }
 
 .folder-link {

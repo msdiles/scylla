@@ -20,6 +20,10 @@ const FolderLink = ({ link, folder }: IProps) => {
     setDisplay(true)
   }
 
+  const openUrl = () => {
+    window.open(link.url, "_blank")
+  }
+
   const onMouseLeave = (e: React.MouseEvent) => {
     console.log("false", e.currentTarget)
     e.preventDefault()
@@ -40,7 +44,7 @@ const FolderLink = ({ link, folder }: IProps) => {
       onMouseEnter={onMouseOver}
       onMouseLeave={onMouseLeave}
     >
-      <Label className="folder-link__url" color={link.color}>
+      <Label className="folder-link__url" color={link.color} onClick={openUrl}>
         <p>{link.name}</p>
       </Label>
       {display && (

@@ -13,6 +13,7 @@ import FolderLsit from "@/components/FolderList"
 import { DragDropContext, DropResult } from "react-beautiful-dnd"
 import changeLinksPosition from "@/utils/changeLinksPosition"
 import Divider from "@/components/Divider"
+import Search from "@/components/Search"
 
 const Home = () => {
   const ref = useRef<HTMLDivElement>(null)
@@ -73,12 +74,7 @@ const Home = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="home" ref={ref}>
-        <Input
-          icon={{ name: "search", circular: true, link: true }}
-          placeholder="Search..."
-          fluid
-          className="home__search"
-        />
+        <Search />
 
         <LinkList linksSequence={linksSequence} width={dividerPosition} />
 
