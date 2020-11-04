@@ -18,7 +18,7 @@ const LinkList = ({ linksSequence, width }: IProps) => {
 
   return (
     <div className="link-list" style={{ width: `${width}px` }}>
-      <h2 className="text_centered">Unfiltered Bookmarks</h2>
+      <h2 className="text_centered">Bookmarks</h2>
       <ListFilter filterTarget="link" />
       <Droppable droppableId="links">
         {(provided) => (

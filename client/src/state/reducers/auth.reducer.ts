@@ -14,6 +14,7 @@ interface AuthState {
   userId: string
   userToken: string
   userRole: [string] | []
+  userEmail: string
   isLogged: boolean
   loading: boolean
   started: boolean
@@ -24,6 +25,7 @@ const initialState: AuthState = {
   userId: "",
   userToken: "",
   userRole: [],
+  userEmail: "",
   isLogged: false,
   loading: false,
   started: false,
@@ -40,6 +42,7 @@ const authReducer = (
         userId: action.payload.user.id,
         userToken: action.payload.accessToken,
         userRole: action.payload.user.role,
+        userEmail: action.payload.user.email,
         isLogged: true,
       }
     case AUTH_LOGOUT_SUCCEEDED:
@@ -49,6 +52,7 @@ const authReducer = (
         userId: "",
         userToken: "",
         userRole: [],
+        userEmail: "",
         isLogged: false,
       }
     case AUTH_GET_USER_INFO_SUCCEEDED:
@@ -57,6 +61,7 @@ const authReducer = (
         userName: action.payload.user.name,
         userId: action.payload.user.id,
         userRole: action.payload.user.role,
+        userEmail: action.payload.user.email,
         isLogged: true,
       }
     case AUTH_REFRESH_SUCCEEDED:
@@ -66,6 +71,7 @@ const authReducer = (
         userId: action.payload.user.id,
         userToken: action.payload.accessToken,
         userRole: action.payload.user.role,
+        userEmail: action.payload.user.email,
         isLogged: true,
       }
     case AUTH_START_LOADING:

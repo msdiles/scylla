@@ -4,6 +4,7 @@ const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCssAssetWebpackPlugin = require("optimize-css-assets-webpack-plugin")
 const TerserWebpackPlugin = require("terser-webpack-plugin")
+const Dotenv = require("dotenv-webpack")
 const path = require("path")
 
 const isDev = process.env.NODE_ENV === "development"
@@ -79,6 +80,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new FriendlyErrorsPlugin(),
     new MiniCssExtractPlugin({ filename: "[name].css" }),
+    new Dotenv({ path: path.resolve(__dirname, ".env") }),
   ],
   mode: "development",
   devtool: isDev ? "eval-cheap-module-source-map" : "",

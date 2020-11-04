@@ -31,6 +31,7 @@ export interface SignInSucceededPayload {
     id: string
     name: string
     role: [string]
+    email: string
   }
   accessToken: string
   refreshToken: string
@@ -69,6 +70,7 @@ export interface RefreshSucceededPayload {
     id: string
     name: string
     role: [string]
+    email: string
   }
   accessToken: string
 }
@@ -95,6 +97,7 @@ export interface GetUserInfoSucceededPayload {
     id: string
     name: string
     role: [string]
+    email: string
   }
 }
 

@@ -180,7 +180,7 @@ export function* changeFolderRequestedSaga(
       if (response.status > 200) throw new Error("Something went wrong")
       const result = yield response.json()
       yield put(changeFolderSucceeded({ ...result }))
-      yield put(setMessage({ message: "Folder changed" }))
+      yield put(setMessage({ message: "Profile changed" }))
     }
   } catch (e) {
     yield put(setError({ error: e.message }))
@@ -216,7 +216,7 @@ export function* deleteFolderRequestedSaga(
       const result = yield response.json()
       yield put(deleteFolderSucceeded({ ...result }))
 
-      yield put(setMessage({ message: "Folder deleted" }))
+      yield put(setMessage({ message: "Profile deleted" }))
     }
   } catch (e) {
     yield put(setError({ error: e.message }))
@@ -246,7 +246,7 @@ export function* addFolderRequestedSaga(action: AddLinkRequestedAction) {
       if (response.status > 200) throw new Error("Something went wrong")
       const result = yield response.json()
       yield put(addFolderSucceeded({ ...result }))
-      yield put(setMessage({ message: "Folder created" }))
+      yield put(setMessage({ message: "Profile created" }))
     }
   } catch (e) {
     yield put(setError({ error: e.message }))

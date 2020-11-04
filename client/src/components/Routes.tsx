@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react"
 import { Route, Switch } from "react-router-dom"
-import Profile from "../pages/Profile"
 import EmptyLayout from "../layouts/empty/Empty"
 import MainLayout from "@/layouts/Main"
 import Login from "@/pages/Login"
@@ -12,6 +11,7 @@ import AuthProvider from "@/components/AuthProvider"
 import { AuthAccess } from "@/types/enums"
 import Error from "@/pages/Error"
 import Home from "@/pages/Home"
+import Profile from "@/pages/Profile"
 
 export interface IRoute {
   name: string
@@ -47,7 +47,7 @@ const Routes: IRoute[] = [
   {
     name: "resetLink",
     path: "/reset",
-    access: AuthAccess.OnlyUnAuth,
+    access: AuthAccess.All,
     exact: true,
     component: (
       <EmptyLayout>
@@ -58,7 +58,7 @@ const Routes: IRoute[] = [
   {
     name: "resetPassword",
     path: "/reset/:date/:id",
-    access: AuthAccess.OnlyUnAuth,
+    access: AuthAccess.All,
     exact: false,
     component: (
       <EmptyLayout>
@@ -99,11 +99,7 @@ const Routes: IRoute[] = [
     name: "error",
     access: AuthAccess.All,
     exact: false,
-    component: (
-      <MainLayout>
-        <Error />
-      </MainLayout>
-    ),
+    component: <Error />,
   },
 ]
 
